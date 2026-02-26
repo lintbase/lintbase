@@ -18,7 +18,7 @@ export default function LandingPage() {
         </ul>
         <div className={styles.navCta}>
           <a href="/sign-in" className={styles.btnGhost}>Sign in</a>
-          <a href="/sign-up" className={styles.btnPrimary}>Get Pro →</a>
+          <a href="/sign-in" className={styles.btnPrimary}>Get started →</a>
         </div>
       </nav>
 
@@ -332,8 +332,8 @@ export default function LandingPage() {
                     ['✓', 'Web dashboard'],
                     ['✓', 'Historical scan tracking'],
                     ['✓', 'Risk score trends over time'],
-                    ['✓', 'Daily automated scans'],
-                    ['✓', 'Slack & email alerts'],
+                    ['✓', 'Issue detail panel'],
+                    ['✓', 'Cancel anytime'],
                   ].map(([check, feature]) => (
                     <li key={feature}>
                       <span className={styles.featureCheck}>{check}</span>
@@ -341,8 +341,8 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <a href="/sign-up" className={styles.btnFullPrimary}>
-                  Start 14-day free trial →
+                <a href="/sign-in" className={styles.btnFullPrimary}>
+                  Get started →
                 </a>
               </div>
             </div>
@@ -365,7 +365,7 @@ export default function LandingPage() {
                 <a href="https://www.npmjs.com/package/lintbase" className={`${styles.btnLg} ${styles.btnBrand}`}>
                   Get started free →
                 </a>
-                <a href="/sign-up" className={`${styles.btnLg} ${styles.btnOutline}`}>
+                <a href="/sign-in" className={`${styles.btnLg} ${styles.btnOutline}`}>
                   Try Pro dashboard
                 </a>
               </div>
@@ -385,8 +385,7 @@ export default function LandingPage() {
               <li><a href="https://github.com/lintbase/lintbase" target="_blank" rel="noreferrer">GitHub</a></li>
               <li><a href="https://www.npmjs.com/package/lintbase" target="_blank" rel="noreferrer">npm</a></li>
               <li><a href="https://x.com/DiaNClabs" target="_blank" rel="noreferrer">𝕏 @DiaNClabs</a></li>
-              <li><a href="/privacy">Privacy</a></li>
-              <li><a href="/terms">Terms</a></li>
+              <li><a href="mailto:support@lintbase.com">Contact</a></li>
             </ul>
             <p className={styles.footerCopy}>© 2026 LintBase. Built by Mamadou Dia.</p>
           </div>
