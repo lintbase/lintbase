@@ -62,6 +62,19 @@ export async function getRecentScans(
     return snap.docs.map((d) => ({ id: d.id, ...d.data() } as StoredScan));
 }
 
+/** Get the most recent scan with full issue details (for collection heatmap) */
+export async function getLatestScanDetail(userId: string): Promise<StoredScanDetail | null> {
+    const q = query(
+        collection(getFirebaseDb(), 'users', userId, 'scans'),
+        orderBy('createdAt', 'desc'),
+        limit(1)
+    );
+    const snap = await getDocs(q);
+    if (snap.empty) return null;
+    const d = snap.docs[0];
+    return { id: d.id, ...d.data() } as StoredScanDetail;
+}
+
 /** Get a single scan by ID */
 export async function getScan(
     userId: string,
