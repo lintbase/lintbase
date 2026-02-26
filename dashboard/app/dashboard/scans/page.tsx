@@ -1,13 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../lib/auth';
-import { getRecentScans, riskLevel, riskColor, formatDate, type StoredScan } from '../../../lib/db';
+import { getRecentScans, riskLevel, formatDate, type StoredScan } from '../../../lib/db';
 import styles from './page.module.css';
+
+function nRiskColor(s: number) { if (s >= 80) return '#d73a49'; if (s >= 60) return '#f66a0a'; if (s >= 40) return '#dbab09'; return '#28a745'; }
+function nRiskBg(s: number) { if (s >= 80) return '#fff5f5'; if (s >= 60) return '#fff8f0'; if (s >= 40) return '#fffbf0'; return '#f0fff4'; }
 
 type SortKey = 'date' | 'risk' | 'errors';
 
 export default function ScansPage() {
     const { user } = useAuth();
+    const router = useRouter();
     const [scans, setScans] = useState<StoredScan[]>([]);
     const [loading, setLoading] = useState(true);
     const [sort, setSort] = useState<SortKey>('date');
@@ -102,18 +107,20 @@ export default function ScansPage() {
                     {/* Rows */}
                     {sorted.map((scan) => {
                         const level = riskLevel(scan.summary.riskScore);
-                        const color = riskColor(scan.summary.riskScore);
                         return (
-                            <div key={scan.id} className={styles.tableRow}>
+                            <div
+                                key={scan.id}
+                                className={`${styles.tableRow} ${styles.tableRowClickable}`}
+                                onClick={() => router.push(`/dashboard/scans/${scan.id}`)}
+                            >
                                 <span className={styles.dateCell}>{formatDate(scan.scannedAt)}</span>
 
                                 <span>
                                     <span
                                         className={styles.riskBadge}
                                         style={{
-                                            background: color + '1a',
-                                            color,
-                                            borderColor: color + '44',
+                                            background: nRiskBg(scan.summary.riskScore),
+                                            color: nRiskColor(scan.summary.riskScore),
                                         }}
                                     >
                                         {scan.summary.riskScore} · {level}
@@ -122,15 +129,16 @@ export default function ScansPage() {
 
                                 <span className={styles.numCell}>{scan.summary.totalCollections}</span>
                                 <span className={styles.numCell}>{scan.summary.totalDocuments}</span>
-                                <span className={styles.numCell} style={{ color: scan.summary.errors > 0 ? '#EF4444' : 'var(--text-3)' }}>
+                                <span className={styles.numCell} style={{ color: scan.summary.errors > 0 ? '#d73a49' : 'var(--n-text-3)' }}>
                                     {scan.summary.errors}
                                 </span>
-                                <span className={styles.numCell} style={{ color: scan.summary.warnings > 0 ? '#F59E0B' : 'var(--text-3)' }}>
+                                <span className={styles.numCell} style={{ color: 'var(--n-text-3)' }}>
                                     {scan.summary.warnings}
                                 </span>
-                                <span className={styles.numCell} style={{ color: scan.summary.infos > 0 ? '#06B6D4' : 'var(--text-3)' }}>
+                                <span className={styles.numCell} style={{ color: 'var(--n-text-3)' }}>
                                     {scan.summary.infos}
                                 </span>
+                                <span className={styles.viewLink}>View →</span>
                             </div>
                         );
                     })}

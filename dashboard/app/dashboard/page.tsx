@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
     AreaChart, Area, BarChart, Bar, XAxis, YAxis,
     CartesianGrid, Tooltip, ResponsiveContainer, Legend,
@@ -75,6 +76,7 @@ function IssueTooltip({ active, payload, label }: { active?: boolean; payload?: 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
     const { user, apiKey } = useAuth();
+    const router = useRouter();
     const [scans, setScans] = useState<StoredScan[]>([]);
     const [latestDetail, setLatestDetail] = useState<StoredScanDetail | null>(null);
     const [loading, setLoading] = useState(true);
@@ -296,10 +298,10 @@ export default function DashboardPage() {
                     </div>
                     <div className={styles.progressGrid}>
                         {[
-                            { label: 'Critical Errors', prev: prevSummary.errors ?? 0, curr: latestSummary.errors ?? 0, color: '#EF4444' },
-                            { label: 'Warnings', prev: prevSummary.warnings ?? 0, curr: latestSummary.warnings ?? 0, color: '#F59E0B' },
-                            { label: 'Infos', prev: prevSummary.infos ?? 0, curr: latestSummary.infos ?? 0, color: '#06B6D4' },
-                            { label: 'Risk Score', prev: prevSummary.riskScore ?? 0, curr: latestSummary.riskScore ?? 0, color: '#7C3AED' },
+                            { label: 'Errors', prev: prevSummary.errors ?? 0, curr: latestSummary.errors ?? 0, color: C_ERROR },
+                            { label: 'Warnings', prev: prevSummary.warnings ?? 0, curr: latestSummary.warnings ?? 0, color: C_MUTED },
+                            { label: 'Infos', prev: prevSummary.infos ?? 0, curr: latestSummary.infos ?? 0, color: '#d9d9d6' },
+                            { label: 'Risk Score', prev: prevSummary.riskScore ?? 0, curr: latestSummary.riskScore ?? 0, color: C_LINE },
                         ].map(({ label, prev, curr, color }) => {
                             const delta = curr - prev;
                             const improved = delta < 0;
@@ -308,7 +310,7 @@ export default function DashboardPage() {
                                 <div key={label} className={styles.progressItem}>
                                     <div className={styles.progressLabel}>
                                         <span>{label}</span>
-                                        <span className={styles.progressDelta} style={{ color: improved ? '#22C55E' : delta > 0 ? '#EF4444' : '#9CA3AF' }}>
+                                        <span className={styles.progressDelta} style={{ color: improved ? '#28a745' : delta > 0 ? '#d73a49' : '#9b9a97' }}>
                                             {delta === 0 ? '—' : `${improved ? '▼' : '▲'} ${pct}%`}
                                         </span>
                                     </div>
@@ -316,12 +318,42 @@ export default function DashboardPage() {
                                         <div className={styles.progressFill} style={{ width: `${Math.min((curr / Math.max(prev, curr, 1)) * 100, 100)}%`, background: color }} />
                                     </div>
                                     <div className={styles.progressValues}>
-                                        <span style={{ color: '#6B7280' }}>{prev} → </span>
-                                        <span style={{ color }}>{curr}</span>
+                                        <span style={{ color: '#9b9a97' }}>{prev} → </span>
+                                        <span style={{ color: '#37352f' }}>{curr}</span>
                                     </div>
                                 </div>
                             );
                         })}
+                    </div>
+                </div>
+            )}
+
+            {/* ── Top Issues ───────────────────────────────────────────────── */}
+            {latestDetail && latestDetail.issues.filter(i => i.severity === 'error').length > 0 && (
+                <div className={styles.chartCard}>
+                    <div className={styles.chartHeader}>
+                        <h3 className={styles.chartTitle}>Issues Requiring Attention</h3>
+                        <a href={`/dashboard/scans/${latestDetail.id}`} className={styles.viewAll}>View all →</a>
+                    </div>
+                    <div className={styles.issuesList}>
+                        {latestDetail.issues
+                            .filter(i => i.severity === 'error')
+                            .slice(0, 5)
+                            .map((issue, idx) => (
+                                <div
+                                    key={idx}
+                                    className={styles.issueRow}
+                                    onClick={() => router.push(`/dashboard/scans/${latestDetail.id}`)}
+                                >
+                                    <span className={styles.issueRowIcon}>✖</span>
+                                    <div className={styles.issueRowBody}>
+                                        <span className={styles.issueRowCollection}>{issue.collection}</span>
+                                        <span className={styles.issueRowSep}>›</span>
+                                        <span className={styles.issueRowMessage}>{issue.message}</span>
+                                    </div>
+                                    <code className={styles.issueRowRule}>{issue.rule}</code>
+                                </div>
+                            ))}
                     </div>
                 </div>
             )}
@@ -338,7 +370,12 @@ export default function DashboardPage() {
                             const s = scan.summary as ScanSummary;
                             const score = s.riskScore ?? 0;
                             return (
-                                <div key={scan.id} className={styles.scanRow}>
+                                <div
+                                    key={scan.id}
+                                    className={styles.scanRow}
+                                    onClick={() => router.push(`/dashboard/scans/${scan.id}`)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <div className={styles.scanBadge}>
                                         {score}
                                     </div>

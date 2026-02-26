@@ -1,7 +1,9 @@
-/* app/dashboard/scans/page.module.css */
+/* app/dashboard/scans/page.module.css — Notion theme */
 
 .page {
-    padding: 40px;
+    padding: 40px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .header {
@@ -9,59 +11,64 @@
     align-items: flex-start;
     justify-content: space-between;
     margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--n-border);
     flex-wrap: wrap;
     gap: 12px;
 }
 
 .title {
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -0.7px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--n-text);
     margin-bottom: 4px;
 }
 
 .sub {
     font-size: 14px;
-    color: var(--text-3);
+    color: var(--n-text-3);
 }
 
-/* ── Controls ────────────────────────────────────────────────────────────── */
+/* ── Controls ─────────────────────────────────────────────────────────────── */
 .controls {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .filters {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     flex-wrap: wrap;
 }
 
 .filterBtn {
-    padding: 6px 14px;
-    border-radius: 20px;
+    padding: 5px 12px;
+    border-radius: 3px;
     font-size: 13px;
     font-weight: 500;
     background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-2);
+    border: 1px solid var(--n-border);
+    color: var(--n-text-3);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.1s;
+    font-family: inherit;
 }
 
 .filterBtn:hover {
-    border-color: var(--border-brand);
-    color: var(--text);
+    border-color: var(--n-border-2);
+    color: var(--n-text);
+    background: var(--n-bg-hover);
 }
 
 .filterBtnActive {
-    background: rgba(124, 58, 237, 0.12);
-    color: var(--brand-light);
-    border-color: var(--border-brand);
+    background: var(--n-bg-selected);
+    color: var(--n-text);
+    border-color: var(--n-border-2);
 }
 
 .sortRow {
@@ -71,122 +78,142 @@
 }
 
 .sortLabel {
-    font-size: 13px;
-    color: var(--text-3);
-    margin-right: 4px;
+    font-size: 12px;
+    color: var(--n-text-3);
+    margin-right: 2px;
 }
 
 .sortBtn {
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
     background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-2);
+    border: 1px solid var(--n-border);
+    color: var(--n-text-3);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.1s;
+    font-family: inherit;
 }
 
 .sortBtn:hover {
-    border-color: var(--border-brand);
-    color: var(--text);
+    background: var(--n-bg-hover);
+    color: var(--n-text);
 }
 
 .sortBtnActive {
-    background: rgba(124, 58, 237, 0.12);
-    color: var(--brand-light);
-    border-color: var(--border-brand);
+    background: var(--n-bg-selected);
+    color: var(--n-text);
+    border-color: var(--n-border-2);
 }
 
-/* ── Table ───────────────────────────────────────────────────────────────── */
+/* ── Table ────────────────────────────────────────────────────────────────── */
 .table {
-    background: var(--bg-1);
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
     overflow: hidden;
+    box-shadow: var(--n-shadow);
 }
 
 .tableRow {
     display: grid;
-    grid-template-columns: 2fr 1.5fr 1fr 1fr 0.8fr 0.8fr 0.8fr;
+    grid-template-columns: 2.2fr 1.4fr 0.8fr 0.8fr 0.7fr 0.7fr 0.7fr 0.5fr;
     gap: 16px;
     align-items: center;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-    transition: background 0.15s;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--n-border);
+    font-size: 13px;
+    color: var(--n-text-2);
 }
 
 .tableRow:last-child {
     border-bottom: none;
 }
 
-.tableRow:not(.tableHeader):hover {
-    background: var(--bg-2);
-}
-
 .tableHeader {
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--text-3);
-    background: var(--bg-2);
-    border-bottom: 1px solid var(--border);
+    color: var(--n-text-3);
+    background: var(--n-bg-muted);
+    border-bottom: 1px solid var(--n-border);
+}
+
+.tableRowClickable {
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.tableRowClickable:hover {
+    background: var(--n-bg-hover);
+}
+
+.tableRowClickable:hover .viewLink {
+    opacity: 1;
 }
 
 .dateCell {
     font-size: 13px;
-    color: var(--text-2);
+    color: var(--n-text-2);
 }
 
 .numCell {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
+    color: var(--n-text-2);
 }
 
 .riskBadge {
     display: inline-block;
-    padding: 3px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: 700;
-    border: 1px solid;
-    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
     white-space: nowrap;
 }
 
-/* ── Empty / Loading ─────────────────────────────────────────────────────── */
+.viewLink {
+    font-size: 12px;
+    color: var(--n-text-3);
+    opacity: 0;
+    transition: opacity 0.1s;
+    text-align: right;
+}
+
+/* ── Empty / Loading ──────────────────────────────────────────────────────── */
 .loading {
     padding: 60px;
     text-align: center;
     font-size: 14px;
-    color: var(--text-3);
-    background: var(--bg-1);
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    color: var(--n-text-3);
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
 }
 
 .empty {
     text-align: center;
     padding: 56px 32px;
-    background: var(--bg-1);
-    border: 1px dashed var(--border);
-    border-radius: 12px;
+    background: var(--n-bg);
+    border: 1px dashed var(--n-border);
+    border-radius: var(--n-radius);
 }
 
 .emptyIcon {
-    font-size: 40px;
-    margin-bottom: 16px;
+    font-size: 36px;
+    margin-bottom: 12px;
+    opacity: 0.4;
 }
 
 .emptyTitle {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
     margin-bottom: 8px;
+    color: var(--n-text);
 }
 
 .emptySub {
     font-size: 14px;
-    color: var(--text-2);
+    color: var(--n-text-3);
 }

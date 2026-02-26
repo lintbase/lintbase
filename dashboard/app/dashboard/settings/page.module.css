@@ -1,0 +1,302 @@
+/* app/dashboard/settings/page.module.css */
+
+.page {
+    padding: 40px 48px;
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.pageHeader {
+    border-bottom: 1px solid var(--n-border);
+    padding-bottom: 20px;
+}
+
+.pageTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--n-text);
+    letter-spacing: -0.4px;
+}
+
+.pageSub {
+    font-size: 14px;
+    color: var(--n-text-3);
+    margin-top: 4px;
+}
+
+/* ── Section ── */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sectionTitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--n-text);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.sectionDesc {
+    font-size: 13px;
+    color: var(--n-text-3);
+    line-height: 1.6;
+}
+
+/* ── Card ── */
+.card {
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    box-shadow: var(--n-shadow);
+    overflow: hidden;
+}
+
+/* ── Profile ── */
+.profileRow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 24px;
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--n-border);
+}
+
+.avatarFallback {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--n-text-2);
+    text-transform: uppercase;
+}
+
+.profileName {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--n-text);
+}
+
+.profileEmail {
+    font-size: 13px;
+    color: var(--n-text-3);
+    margin-top: 2px;
+}
+
+/* ── API Key ── */
+.keyRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    background: var(--n-bg-muted);
+    border-bottom: 1px solid var(--n-border);
+}
+
+.keyValue {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--n-text-2);
+    word-break: break-all;
+}
+
+.copyBtn {
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    color: var(--n-text-2);
+    border-radius: var(--n-radius);
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-family: inherit;
+    flex-shrink: 0;
+}
+
+.copyBtn:hover {
+    background: var(--n-bg-hover);
+    color: var(--n-text);
+}
+
+.cliExample {
+    padding: 16px 24px;
+}
+
+.exampleLabel {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--n-text-3);
+    margin-bottom: 8px;
+}
+
+.cliExample code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--n-text-2);
+    line-height: 2;
+    display: block;
+    word-break: break-all;
+}
+
+.inlineCode {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+/* ── Plan ── */
+.planRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+}
+
+.planName {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--n-text);
+    margin-bottom: 4px;
+}
+
+.planDesc {
+    font-size: 13px;
+    color: var(--n-text-3);
+}
+
+.planBadge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--n-text-3);
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    padding: 4px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.planDivider {
+    height: 1px;
+    background: var(--n-border);
+}
+
+.proRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+}
+
+.proName {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--n-text);
+    margin-bottom: 8px;
+}
+
+.proList {
+    padding-left: 16px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.proList li {
+    font-size: 13px;
+    color: var(--n-text-3);
+}
+
+.upgradeBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: var(--n-text);
+    color: var(--n-bg);
+    border: none;
+    border-radius: var(--n-radius);
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.4;
+    white-space: nowrap;
+    font-family: inherit;
+    flex-shrink: 0;
+}
+
+.upgradeNote {
+    font-size: 11px;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+/* ── Danger ── */
+.dangerRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+}
+
+.dangerLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--n-text);
+    margin-bottom: 3px;
+}
+
+.dangerDesc {
+    font-size: 13px;
+    color: var(--n-text-3);
+}
+
+.signOutBtn {
+    background: none;
+    border: 1px solid var(--n-border);
+    color: var(--n-text-2);
+    border-radius: var(--n-radius);
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.signOutBtn:hover {
+    border-color: '#d73a49';
+    color: '#d73a49';
+    background: '#fff5f5';
+}

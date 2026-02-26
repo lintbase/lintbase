@@ -1,0 +1,369 @@
+/* app/dashboard/scans/[scanId]/page.module.css */
+
+.page {
+    padding: 36px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ── Loading ── */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    gap: 12px;
+    color: var(--n-text-3);
+    font-size: 14px;
+}
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--n-border-2);
+    border-top-color: var(--n-text-3);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.link {
+    color: var(--n-info);
+    text-decoration: none;
+}
+
+.link:hover {
+    opacity: 0.7;
+}
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+.breadLink {
+    color: var(--n-text-3);
+    text-decoration: none;
+}
+
+.breadLink:hover {
+    color: var(--n-text);
+}
+
+.breadSep {
+    color: var(--n-border-2);
+}
+
+.breadCurrent {
+    color: var(--n-text-2);
+    font-weight: 500;
+}
+
+/* ── Scan Header ── */
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--n-border);
+}
+
+.headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--n-text);
+    letter-spacing: -0.3px;
+}
+
+.meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--n-text-3);
+}
+
+.metaDot {
+    color: var(--n-border-2);
+}
+
+.scorePill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: var(--n-radius);
+    min-width: 72px;
+    flex-shrink: 0;
+}
+
+.scoreNum {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.scoreLabel {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* ── Summary row ── */
+.summaryRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+@media (max-width: 700px) {
+    .summaryRow {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.summaryCard {
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    padding: 14px 18px;
+    box-shadow: var(--n-shadow);
+}
+
+.summaryVal {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.summaryLabel {
+    font-size: 12px;
+    color: var(--n-text-3);
+    margin-top: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Filter bar ── */
+.filterBar {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--n-border);
+    padding-bottom: 0;
+}
+
+.filterBtn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--n-text-3);
+    cursor: pointer;
+    transition: all 0.1s;
+    letter-spacing: 0.01em;
+    margin-bottom: -1px;
+    font-family: inherit;
+}
+
+.filterBtn:hover {
+    color: var(--n-text);
+}
+
+.filterActive {
+    color: var(--n-text) !important;
+    border-bottom-color: var(--n-text) !important;
+}
+
+/* ── Collections ── */
+.empty {
+    color: var(--n-text-3);
+    font-size: 14px;
+    padding: 24px 0;
+    text-align: center;
+}
+
+.collections {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.collection {
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    overflow: hidden;
+}
+
+.collectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: var(--n-text);
+    transition: background 0.1s;
+}
+
+.collectionHeader:hover {
+    background: var(--n-bg-hover);
+}
+
+.collectionToggle {
+    font-size: 12px;
+    color: var(--n-text-3);
+    flex-shrink: 0;
+    width: 14px;
+}
+
+.collectionName {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--n-text);
+    flex: 1;
+}
+
+.collectionBadges {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.badgeError {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: #fff5f5;
+    color: #d73a49;
+}
+
+.badgeMuted {
+    font-size: 11px;
+    color: var(--n-text-3);
+    padding: 2px 0;
+}
+
+/* ── Issue list ── */
+.issueList {
+    border-top: 1px solid var(--n-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.issue {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px 12px 40px;
+    border-bottom: 1px solid var(--n-border);
+    transition: background 0.1s;
+}
+
+.issue:last-child {
+    border-bottom: none;
+}
+
+.issue:hover {
+    background: var(--n-bg-hover);
+}
+
+.issueIcon {
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    width: 16px;
+    text-align: center;
+}
+
+.issueBody {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.issueTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.issueMessage {
+    font-size: 13px;
+    color: var(--n-text);
+    line-height: 1.5;
+}
+
+.issueRule {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--n-text-3);
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.issueSuggestion {
+    font-size: 12px;
+    color: var(--n-text-3);
+    line-height: 1.5;
+}
+
+.issueDocs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.docId {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--n-text-2);
+}
+
+.docsMore {
+    font-size: 11px;
+    color: var(--n-text-3);
+}
