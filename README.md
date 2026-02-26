@@ -1,95 +1,151 @@
 # LintBase
 
-> **ESLint for your database** — catch schema drift, security vulnerabilities, performance issues, and cost leaks in NoSQL databases before they become expensive problems.
+> **ESLint for your Firestore database** — catch security vulnerabilities, cost leaks, schema drift, and performance issues before they become expensive production problems.
 
-```
+```bash
 npx lintbase scan firestore --key ./service-account.json
 ```
 
+[![npm version](https://img.shields.io/npm/v/lintbase.svg)](https://www.npmjs.com/package/lintbase)
+[![npm downloads](https://img.shields.io/npm/dm/lintbase.svg)](https://www.npmjs.com/package/lintbase)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ---
 
-## ✨ Features (Phase 1)
+## Why LintBase?
 
-| Feature | Status |
+Your code has ESLint. Your Firestore doesn't have anything.
+
+LintBase scans your database and surfaces issues that are invisible until they show up as an outage or a surprise bill:
+
+- 🔒 **Security** — documents with no auth rules, exposed PII, unvalidated writes
+- 💸 **Cost** — unbounded queries, missing indexes, collections that cost $200/mo for nothing  
+- 📐 **Schema drift** — fields that changed types, missing required fields, inconsistent structure
+- ⚡ **Performance** — deeply nested data, missing pagination, hot document patterns
+
+---
+
+## Quick Start
+
+### 1. Get a service account key
+
+Firebase Console → Project Settings → Service Accounts → **Generate new private key**
+
+Save the JSON file. **Never commit it to git.**
+
+### 2. Run a scan
+
+```bash
+npx lintbase scan firestore --key ./service-account.json
+```
+
+You'll see a full report in your terminal:
+
+```
+ LintBase — Firestore Scan
+ ─────────────────────────────────────────────
+ Collections scanned:  12
+ Documents sampled:    847
+ Issues found:         23  (4 errors · 11 warnings · 8 infos)
+ Risk score:           67 / 100  [HIGH]
+
+ ERRORS
+ ✖  users         no-auth-check        Documents readable without authentication
+ ✖  orders        missing-index        Query on `status` + `createdAt` has no composite index
+ ✖  debug_logs    large-collection     Collection has 2.4M docs — estimated $340/mo in reads
+
+ WARNINGS
+ ⚠  products      schema-drift         Field `price` found as both Number and String
+ ⚠  sessions      ttl-missing          No expiry field — stale docs accumulate indefinitely
+ ...
+```
+
+### 3. Save to your dashboard (optional)
+
+Track your database health over time at [lintbase.com](https://lintbase.com):
+
+```bash
+npx lintbase scan firestore \
+  --key ./service-account.json \
+  --save https://www.lintbase.com \
+  --token <your-api-token>
+```
+
+Get your token at **[lintbase.com/dashboard/settings](https://www.lintbase.com/dashboard/settings)** — free to start.
+
+---
+
+## What it catches
+
+### 🔒 Security
+| Rule | What it detects |
 |---|---|
-| Firestore collection discovery | ✅ |
-| Document sampling (with billing guard) | ✅ |
-| Beautiful terminal output | ✅ |
-| Depth & size metrics per collection | ✅ |
+| `no-auth-check` | Collections readable/writable without auth |
+| `exposed-pii` | Email, phone, SSN fields without encryption markers |
+| `world-readable` | Documents with overly permissive security rules |
 
+### 💸 Cost
+| Rule | What it detects |
+|---|---|
+| `large-collection` | Collections with 100k+ docs and high read cost |
+| `unbounded-query` | Queries without `limit()` that scan entire collections |
+| `missing-index` | Filter combinations that fall back to full collection scans |
+| `debug-collection` | Collections that look like temporary data that was never cleaned up |
+
+### 📐 Schema Drift
+| Rule | What it detects |
+|---|---|
+| `type-inconsistency` | Field stored as different types across documents |
+| `missing-required-field` | Field present in 90%+ of docs but absent in some |
+| `nullable-id` | Reference fields that are sometimes null |
+
+### ⚡ Performance
+| Rule | What it detects |
+|---|---|
+| `deep-nesting` | Document fields nested > 3 levels deep |
+| `large-document` | Documents approaching the 1MB Firestore limit |
+| `hot-document` | Single document updated by many users simultaneously |
+| `no-pagination` | Collections without a standard pagination field |
 
 ---
 
-## 🚀 Quick Start
-
-### 1. Install
+## Options
 
 ```bash
-npm install -g lintbase
-# or use it directly with npx:
-npx lintbase scan firestore --key ./service-account.json
-```
+lintbase scan firestore [options]
 
-### 2. Get a Firestore Service Account Key
-
-1. Go to **Firebase Console → Project Settings → Service Accounts**
-2. Click **Generate new private key**
-3. Save the JSON file (keep it out of git!)
-
-### 3. Run a scan
-
-```bash
-lintbase scan firestore --key ./service-account.json
-# Optionally cap document samples per collection:
-lintbase scan firestore --key ./service-account.json --limit 50
+Options:
+  --key <path>      Path to Firebase service account JSON      [required]
+  --limit <n>       Max documents to sample per collection     [default: 100]
+  --save <url>      Dashboard URL to save results
+  --token <token>   API token for dashboard (from lintbase.com)
+  --collections     Comma-separated list of collections to scan
+  -h, --help        Show help
 ```
 
 ---
 
-## 🛠 Development
+## Dashboard
 
-```bash
-# Install deps
-npm install
+The CLI is free forever. The [dashboard](https://lintbase.com) adds:
 
-# Run in dev mode (no build step needed)
-npx tsx src/index.ts scan firestore --key ./service-account.json
+- **Trend analysis** — is your risk score improving or getting worse over time?
+- **90-day history** — compare any two scans side by side
+- **Issue detail** — click any issue for full context, affected documents, and fix suggestion
+- **Team visibility** — share scan results without giving DB access
 
-# Build for production
-npm run build
-
-# Run the compiled binary
-node dist/index.js scan firestore --key ./service-account.json
-```
+**Free:** 7 scans · **Pro:** $39/month for unlimited history, exports, and alerts
 
 ---
 
-## 📐 Architecture
+## Security
 
-```
-src/
-├── index.ts                  # CLI entry point (Commander.js)
-├── connectors/
-│   ├── base.connector.ts     # Abstract class — all connectors extend this
-│   └── firestore.connector.ts
-├── analyzers/                # Phase 2 — database-agnostic issue detectors
-├── reporters/
-│   └── terminal.reporter.ts  # Chalk + cli-table3 terminal output
-└── types/
-    └── index.ts              # Shared TypeScript interfaces (the core contract)
-```
-
-**Key design principle:** Connectors only fetch and transform data into the `LintBaseDocument` shape. Analyzers only consume that shape. They never touch each other directly.
+- Your service account key **never leaves your machine** — it is only read locally
+- Document sampling is hard-capped at `--limit` (default 100) to prevent accidental read costs
+- The `--save` flag only sends the scan summary and issue list — never raw document data
 
 ---
 
-## 🔐 Security
+## License
 
-- The service account key is **never** transmitted anywhere — it is only read locally.
-- Document sampling is hard-capped to `--limit` (default 100) to prevent accidental Firestore read billing.
-
----
-
-## 📄 License
-
-ISC © Mamadou Dia
+MIT © [Mamadou Dia](https://github.com/lintbase)
