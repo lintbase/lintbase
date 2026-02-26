@@ -4,7 +4,7 @@ import { useAuth } from '../../../lib/auth';
 import styles from './page.module.css';
 
 export default function SettingsPage() {
-    const { user, apiKey, signOut } = useAuth();
+    const { user, apiKey, plan, signOut } = useAuth();
     const [copied, setCopied] = useState(false);
 
     function copyKey() {
@@ -74,27 +74,35 @@ export default function SettingsPage() {
                 <div className={styles.card}>
                     <div className={styles.planRow}>
                         <div>
-                            <div className={styles.planName}>Free Tier</div>
-                            <div className={styles.planDesc}>7-day scan history · up to 20 scans/month · manual CLI only</div>
+                            <div className={styles.planName}>{plan === 'pro' ? 'Pro' : 'Free Tier'}</div>
+                            <div className={styles.planDesc}>
+                                {plan === 'pro'
+                                    ? '90-day history · unlimited scans · exports · alerts'
+                                    : '7-day scan history · up to 20 scans/month · manual CLI only'}
+                            </div>
                         </div>
-                        <span className={styles.planBadge}>Current plan</span>
+                        <span className={styles.planBadge} style={plan === 'pro' ? { color: '#28a745', borderColor: '#c3e6cb', background: '#f0fff4' } : {}}>
+                            {plan === 'pro' ? 'Active' : 'Current plan'}
+                        </span>
                     </div>
                     <div className={styles.planDivider} />
-                    <div className={styles.proRow}>
-                        <div>
-                            <div className={styles.proName}>Pro — <strong>$39/month</strong></div>
-                            <ul className={styles.proList}>
-                                <li>90-day historical trends</li>
-                                <li>Slack &amp; email alerts</li>
-                                <li>PDF / CSV exports</li>
-                                <li>Unlimited scans</li>
-                            </ul>
+                    {plan === 'free' && (
+                        <div className={styles.proRow}>
+                            <div>
+                                <div className={styles.proName}>Pro — <strong>$39/month</strong></div>
+                                <ul className={styles.proList}>
+                                    <li>90-day historical trends</li>
+                                    <li>Slack &amp; email alerts</li>
+                                    <li>PDF / CSV exports</li>
+                                    <li>Unlimited scans</li>
+                                </ul>
+                            </div>
+                            <button className={styles.upgradeBtn} disabled>
+                                Upgrade to Pro
+                                <span className={styles.upgradeNote}>Coming soon</span>
+                            </button>
                         </div>
-                        <button className={styles.upgradeBtn} disabled>
-                            Upgrade to Pro
-                            <span className={styles.upgradeNote}>Coming soon</span>
-                        </button>
-                    </div>
+                    )}
                 </div>
             </section>
 

@@ -15,19 +15,30 @@ const C_INFO = '#0366d6';
 type SortKey = 'date' | 'risk' | 'errors';
 
 export default function ScansPage() {
-    const { user } = useAuth();
+    const { user, plan } = useAuth();
     const router = useRouter();
     const [scans, setScans] = useState<StoredScan[]>([]);
+    const [hasMore, setHasMore] = useState(false);
     const [loading, setLoading] = useState(true);
     const [sort, setSort] = useState<SortKey>('date');
     const [filter, setFilter] = useState<'all' | 'critical' | 'high' | 'medium' | 'low'>('all');
 
     useEffect(() => {
         if (!user) return;
-        getRecentScans(user.uid, 100)
-            .then(setScans)
+        const LIMIT = plan === 'pro' ? 100 : 8;
+        const FREE_CAP = 7;
+        getRecentScans(user.uid, LIMIT)
+            .then(data => {
+                if (plan === 'free' && data.length > FREE_CAP) {
+                    setHasMore(true);
+                    setScans(data.slice(0, FREE_CAP));
+                } else {
+                    setHasMore(false);
+                    setScans(data);
+                }
+            })
             .finally(() => setLoading(false));
-    }, [user]);
+    }, [user, plan]);
 
     const sorted = [...scans]
         .filter((s) => {
@@ -96,57 +107,70 @@ export default function ScansPage() {
                     </p>
                 </div>
             ) : (
-                <div className={styles.table}>
-                    {/* Table header */}
-                    <div className={`${styles.tableRow} ${styles.tableHeader}`}>
-                        <span>Date</span>
-                        <span>Risk</span>
-                        <span>Collections</span>
-                        <span>Documents</span>
-                        <span>Errors</span>
-                        <span>Warnings</span>
-                        <span>Infos</span>
+                <>
+                    <div className={styles.table}>
+                        {/* Table header */}
+                        <div className={`${styles.tableRow} ${styles.tableHeader}`}>
+                            <span>Date</span>
+                            <span>Risk</span>
+                            <span>Collections</span>
+                            <span>Documents</span>
+                            <span>Errors</span>
+                            <span>Warnings</span>
+                            <span>Infos</span>
+                        </div>
+
+                        {/* Rows */}
+                        {sorted.map((scan) => {
+                            const level = riskLevel(scan.summary.riskScore);
+                            return (
+                                <div
+                                    key={scan.id}
+                                    className={`${styles.tableRow} ${styles.tableRowClickable}`}
+                                    onClick={() => router.push(`/dashboard/scans/${scan.id}`)}
+                                >
+                                    <span className={styles.dateCell}>{formatDate(scan.scannedAt)}</span>
+
+                                    <span>
+                                        <span
+                                            className={styles.riskBadge}
+                                            style={{
+                                                background: nRiskBg(scan.summary.riskScore),
+                                                color: nRiskColor(scan.summary.riskScore),
+                                            }}
+                                        >
+                                            {scan.summary.riskScore} · {level}
+                                        </span>
+                                    </span>
+
+                                    <span className={styles.numCell}>{scan.summary.totalCollections}</span>
+                                    <span className={styles.numCell}>{scan.summary.totalDocuments}</span>
+                                    <span className={styles.numCell} style={{ color: scan.summary.errors > 0 ? C_ERROR : 'var(--n-text-3)' }}>
+                                        {scan.summary.errors}
+                                    </span>
+                                    <span className={styles.numCell} style={{ color: scan.summary.warnings > 0 ? C_WARN : 'var(--n-text-3)' }}>
+                                        {scan.summary.warnings}
+                                    </span>
+                                    <span className={styles.numCell} style={{ color: scan.summary.infos > 0 ? C_INFO : 'var(--n-text-3)' }}>
+                                        {scan.summary.infos}
+                                    </span>
+                                    <span className={styles.viewLink}>View →</span>
+                                </div>
+                            );
+                        })}
                     </div>
 
-                    {/* Rows */}
-                    {sorted.map((scan) => {
-                        const level = riskLevel(scan.summary.riskScore);
-                        return (
-                            <div
-                                key={scan.id}
-                                className={`${styles.tableRow} ${styles.tableRowClickable}`}
-                                onClick={() => router.push(`/dashboard/scans/${scan.id}`)}
-                            >
-                                <span className={styles.dateCell}>{formatDate(scan.scannedAt)}</span>
-
-                                <span>
-                                    <span
-                                        className={styles.riskBadge}
-                                        style={{
-                                            background: nRiskBg(scan.summary.riskScore),
-                                            color: nRiskColor(scan.summary.riskScore),
-                                        }}
-                                    >
-                                        {scan.summary.riskScore} · {level}
-                                    </span>
-                                </span>
-
-                                <span className={styles.numCell}>{scan.summary.totalCollections}</span>
-                                <span className={styles.numCell}>{scan.summary.totalDocuments}</span>
-                                <span className={styles.numCell} style={{ color: scan.summary.errors > 0 ? C_ERROR : 'var(--n-text-3)' }}>
-                                    {scan.summary.errors}
-                                </span>
-                                <span className={styles.numCell} style={{ color: scan.summary.warnings > 0 ? C_WARN : 'var(--n-text-3)' }}>
-                                    {scan.summary.warnings}
-                                </span>
-                                <span className={styles.numCell} style={{ color: scan.summary.infos > 0 ? C_INFO : 'var(--n-text-3)' }}>
-                                    {scan.summary.infos}
-                                </span>
-                                <span className={styles.viewLink}>View →</span>
+                    {/* Upgrade banner — free tier */}
+                    {plan === 'free' && hasMore && (
+                        <div className={styles.upgradeBanner}>
+                            <div>
+                                <div className={styles.upgradeBannerTitle}>🔒 Showing 7 of your most recent scans</div>
+                                <div className={styles.upgradeBannerSub}>Upgrade to Pro to unlock your full scan history and 90-day trend analysis</div>
                             </div>
-                        );
-                    })}
-                </div>
+                            <a href="/dashboard/settings" className={styles.upgradeBtn}>Upgrade to Pro →</a>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );

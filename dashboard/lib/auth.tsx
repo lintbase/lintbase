@@ -29,6 +29,7 @@ interface AuthContextValue {
     user: User | null;
     loading: boolean;
     apiKey: string | null;
+    plan: 'free' | 'pro';
     signInWithGoogle: () => Promise<void>;
     signOut: () => Promise<void>;
 }
@@ -39,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [apiKey, setApiKey] = useState<string | null>(null);
+    const [plan, setPlan] = useState<'free' | 'pro'>('free');
 
     useEffect(() => {
         // Guard: only initialize Firebase if the API key is configured.
@@ -64,19 +66,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         displayName: firebaseUser.displayName,
                         photoURL: firebaseUser.photoURL,
                         apiKey: newApiKey,
+                        plan: 'free',
                         createdAt: serverTimestamp(),
                     });
-                    // Register the API key for fast lookup from the CLI
                     await setDoc(doc(getFirebaseDb(), 'apiKeys', newApiKey), {
                         userId: firebaseUser.uid,
                         createdAt: serverTimestamp(),
                     });
                     setApiKey(newApiKey);
+                    setPlan('free');
                 } else {
-                    setApiKey((snap.data() as { apiKey: string }).apiKey ?? null);
+                    const data = snap.data() as { apiKey: string; plan?: 'free' | 'pro' };
+                    setApiKey(data.apiKey ?? null);
+                    setPlan(data.plan ?? 'free');
                 }
             } else {
                 setApiKey(null);
+                setPlan('free');
             }
 
             setLoading(false);
@@ -95,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, apiKey, signInWithGoogle, signOut }}>
+        <AuthContext.Provider value={{ user, loading, apiKey, plan, signInWithGoogle, signOut }}>
             {children}
         </AuthContext.Provider>
     );

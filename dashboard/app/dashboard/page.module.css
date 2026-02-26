@@ -522,3 +522,31 @@
     white-space: nowrap;
     flex-shrink: 0;
 }
+/* ── Upgrade Banner ──────────────────────────────────────────────────────── */
+.upgradeBanner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 16px;
+    border-top: 1px solid var(--n-border);
+    background: var(--n-bg-muted);
+}
+.upgradeBannerTitle { font-size: 13px; font-weight: 600; color: var(--n-text-2); margin-bottom: 3px; }
+.upgradeBannerSub   { font-size: 12px; color: var(--n-text-3); }
+.upgradeBtn {
+    background: var(--n-text);
+    color: var(--n-bg);
+    border: none;
+    border-radius: var(--n-radius);
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.1s;
+}
+.upgradeBtn:hover { opacity: 0.85; }

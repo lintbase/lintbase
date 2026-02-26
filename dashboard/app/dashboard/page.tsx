@@ -75,9 +75,10 @@ function IssueTooltip({ active, payload, label }: { active?: boolean; payload?: 
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
-    const { user, apiKey } = useAuth();
+    const { user, apiKey, plan } = useAuth();
     const router = useRouter();
     const [scans, setScans] = useState<StoredScan[]>([]);
+    const [hasMore, setHasMore] = useState(false);
     const [latestDetail, setLatestDetail] = useState<StoredScanDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [copied, setCopied] = useState(false);
@@ -85,11 +86,19 @@ export default function DashboardPage() {
     useEffect(() => {
         if (!user) return;
         (async () => {
+            const LIMIT = plan === 'pro' ? 20 : 8; // fetch one extra for free to detect overflow
             const [recent, detail] = await Promise.all([
-                getRecentScans(user.uid, 20),
+                getRecentScans(user.uid, LIMIT),
                 getLatestScanDetail(user.uid),
             ]);
-            setScans(recent);
+            const FREE_CAP = 7;
+            if (plan === 'free' && recent.length > FREE_CAP) {
+                setHasMore(true);
+                setScans(recent.slice(0, FREE_CAP));
+            } else {
+                setHasMore(false);
+                setScans(recent);
+            }
             setLatestDetail(detail);
             setLoading(false);
         })();
@@ -395,6 +404,16 @@ export default function DashboardPage() {
                             );
                         })}
                     </div>
+                    {/* Upgrade banner — free tier */}
+                    {plan === 'free' && hasMore && (
+                        <div className={styles.upgradeBanner}>
+                            <div>
+                                <div className={styles.upgradeBannerTitle}>🔒 Older scans hidden</div>
+                                <div className={styles.upgradeBannerSub}>Upgrade to Pro for 90-day history &amp; trend analysis</div>
+                            </div>
+                            <a href="/dashboard/settings" className={styles.upgradeBtn}>Upgrade →</a>
+                        </div>
+                    )}
                 </div>
 
                 <div className={styles.chartCard}>
