@@ -8,6 +8,10 @@ import styles from './page.module.css';
 function nRiskColor(s: number) { if (s >= 80) return '#d73a49'; if (s >= 60) return '#f66a0a'; if (s >= 40) return '#dbab09'; return '#28a745'; }
 function nRiskBg(s: number) { if (s >= 80) return '#fff5f5'; if (s >= 60) return '#fff8f0'; if (s >= 40) return '#fffbf0'; return '#f0fff4'; }
 
+const C_ERROR = '#d73a49';
+const C_WARN = '#f66a0a';
+const C_INFO = '#0366d6';
+
 type SortKey = 'date' | 'risk' | 'errors';
 
 export default function ScansPage() {
@@ -129,13 +133,13 @@ export default function ScansPage() {
 
                                 <span className={styles.numCell}>{scan.summary.totalCollections}</span>
                                 <span className={styles.numCell}>{scan.summary.totalDocuments}</span>
-                                <span className={styles.numCell} style={{ color: scan.summary.errors > 0 ? '#d73a49' : 'var(--n-text-3)' }}>
+                                <span className={styles.numCell} style={{ color: scan.summary.errors > 0 ? C_ERROR : 'var(--n-text-3)' }}>
                                     {scan.summary.errors}
                                 </span>
-                                <span className={styles.numCell} style={{ color: 'var(--n-text-3)' }}>
+                                <span className={styles.numCell} style={{ color: scan.summary.warnings > 0 ? C_WARN : 'var(--n-text-3)' }}>
                                     {scan.summary.warnings}
                                 </span>
-                                <span className={styles.numCell} style={{ color: 'var(--n-text-3)' }}>
+                                <span className={styles.numCell} style={{ color: scan.summary.infos > 0 ? C_INFO : 'var(--n-text-3)' }}>
                                     {scan.summary.infos}
                                 </span>
                                 <span className={styles.viewLink}>View →</span>

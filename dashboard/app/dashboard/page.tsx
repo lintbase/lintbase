@@ -140,11 +140,12 @@ export default function DashboardPage() {
         ? Math.round(scans.reduce((s, sc) => s + ((sc.summary as ScanSummary).riskScore ?? 0), 0) / scans.length)
         : 0;
 
-    // Chart theme — 2 colors max (Notion minimalism)
+    // Chart theme — Notion minimalism, semantic colors for severity
     const GRID = 'rgba(0,0,0,0.05)';
     const AXIS = '#9b9a97';
-    const C_ERROR = '#d73a49';   // muted red — only for errors
-    const C_MUTED = '#d9d9d6';   // light gray — warnings + infos
+    const C_ERROR = '#d73a49';   // muted red
+    const C_WARN = '#f66a0a';   // muted orange
+    const C_INFO = '#0366d6';   // muted blue
     const C_LINE = '#6e40c9';   // single brand accent for timeline
 
     if (loading) {
@@ -256,8 +257,8 @@ export default function DashboardPage() {
                             <Tooltip content={<IssueTooltip />} />
                             <Legend wrapperStyle={{ fontSize: 11, color: AXIS }} />
                             <Bar dataKey="Errors" stackId="a" fill={C_ERROR} />
-                            <Bar dataKey="Warnings" stackId="a" fill={C_MUTED} />
-                            <Bar dataKey="Infos" stackId="a" fill="#e9e9e7" radius={[2, 2, 0, 0]} />
+                            <Bar dataKey="Warnings" stackId="a" fill={C_WARN} />
+                            <Bar dataKey="Infos" stackId="a" fill={C_INFO} radius={[2, 2, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -282,8 +283,8 @@ export default function DashboardPage() {
                             <Tooltip content={<IssueTooltip />} />
                             <Legend wrapperStyle={{ fontSize: 11, color: AXIS }} />
                             <Bar dataKey="Errors" stackId="a" fill={C_ERROR} />
-                            <Bar dataKey="Warnings" stackId="a" fill={C_MUTED} />
-                            <Bar dataKey="Infos" stackId="a" fill="#e9e9e7" radius={[0, 2, 2, 0]} />
+                            <Bar dataKey="Warnings" stackId="a" fill={C_WARN} />
+                            <Bar dataKey="Infos" stackId="a" fill={C_INFO} radius={[0, 2, 2, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -299,8 +300,8 @@ export default function DashboardPage() {
                     <div className={styles.progressGrid}>
                         {[
                             { label: 'Errors', prev: prevSummary.errors ?? 0, curr: latestSummary.errors ?? 0, color: C_ERROR },
-                            { label: 'Warnings', prev: prevSummary.warnings ?? 0, curr: latestSummary.warnings ?? 0, color: C_MUTED },
-                            { label: 'Infos', prev: prevSummary.infos ?? 0, curr: latestSummary.infos ?? 0, color: '#d9d9d6' },
+                            { label: 'Warnings', prev: prevSummary.warnings ?? 0, curr: latestSummary.warnings ?? 0, color: C_WARN },
+                            { label: 'Infos', prev: prevSummary.infos ?? 0, curr: latestSummary.infos ?? 0, color: C_INFO },
                             { label: 'Risk Score', prev: prevSummary.riskScore ?? 0, curr: latestSummary.riskScore ?? 0, color: C_LINE },
                         ].map(({ label, prev, curr, color }) => {
                             const delta = curr - prev;
@@ -382,9 +383,9 @@ export default function DashboardPage() {
                                     <div className={styles.scanInfo}>
                                         <div className={styles.scanDate}>{formatDate(scan.scannedAt)}</div>
                                         <div className={styles.scanCounts}>
-                                            <span style={{ color: '#d73a49' }}>✖ {s.errors ?? 0}</span>
-                                            <span style={{ color: AXIS }}>⚠ {s.warnings ?? 0}</span>
-                                            <span style={{ color: AXIS }}>ℹ {s.infos ?? 0}</span>
+                                            <span style={{ color: C_ERROR }}>✖ {s.errors ?? 0}</span>
+                                            <span style={{ color: C_WARN }}>⚠ {s.warnings ?? 0}</span>
+                                            <span style={{ color: C_INFO }}>ℹ {s.infos ?? 0}</span>
                                         </div>
                                     </div>
                                     <div className={styles.scanLevel} style={{ color: notionRiskColor(score) }}>

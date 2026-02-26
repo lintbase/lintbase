@@ -19,7 +19,7 @@ function notionRiskBg(s: number) {
 }
 
 const SEV_ICON: Record<string, string> = { error: '✖', warning: '⚠', info: 'ℹ' };
-const SEV_COLOR: Record<string, string> = { error: '#d73a49', warning: '#9b9a97', info: '#9b9a97' };
+const SEV_COLOR: Record<string, string> = { error: '#d73a49', warning: '#f66a0a', info: '#0366d6' };
 
 export default function ScanDetailPage() {
     const { user } = useAuth();
