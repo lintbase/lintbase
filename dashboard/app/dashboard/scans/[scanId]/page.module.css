@@ -7,6 +7,7 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+    transition: max-width 0.25s ease;
 }
 
 /* ── Loading ── */
@@ -37,7 +38,7 @@
 }
 
 .link {
-    color: var(--n-info);
+    color: #0366d6;
     text-decoration: none;
 }
 
@@ -106,6 +107,18 @@
     color: var(--n-border-2);
 }
 
+.connectorBadge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--n-text-2);
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    padding: 2px 7px;
+    border-radius: 3px;
+}
+
 .scorePill {
     display: flex;
     flex-direction: column;
@@ -171,9 +184,9 @@
 /* ── Filter bar ── */
 .filterBar {
     display: flex;
+    align-items: center;
     gap: 4px;
     border-bottom: 1px solid var(--n-border);
-    padding-bottom: 0;
 }
 
 .filterBtn {
@@ -186,7 +199,6 @@
     color: var(--n-text-3);
     cursor: pointer;
     transition: all 0.1s;
-    letter-spacing: 0.01em;
     margin-bottom: -1px;
     font-family: inherit;
 }
@@ -198,6 +210,25 @@
 .filterActive {
     color: var(--n-text) !important;
     border-bottom-color: var(--n-text) !important;
+}
+
+.clearPanel {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--n-text-3);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.1s;
+    margin-bottom: 4px;
+}
+
+.clearPanel:hover {
+    color: var(--n-text);
+    border-color: var(--n-border-2);
 }
 
 /* ── Collections ── */
@@ -272,7 +303,6 @@
 .badgeMuted {
     font-size: 11px;
     color: var(--n-text-3);
-    padding: 2px 0;
 }
 
 /* ── Issue list ── */
@@ -284,9 +314,11 @@
 
 .issue {
     display: flex;
+    align-items: flex-start;
     gap: 12px;
     padding: 12px 16px 12px 40px;
     border-bottom: 1px solid var(--n-border);
+    cursor: pointer;
     transition: background 0.1s;
 }
 
@@ -296,6 +328,10 @@
 
 .issue:hover {
     background: var(--n-bg-hover);
+}
+
+.issueSelected {
+    background: var(--n-bg-selected) !important;
 }
 
 .issueIcon {
@@ -366,4 +402,259 @@
 .docsMore {
     font-size: 11px;
     color: var(--n-text-3);
+}
+
+.issueChevron {
+    color: var(--n-border-2);
+    font-size: 16px;
+    margin-left: 4px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────── */
+/* Issue Detail Panel                                                           */
+/* ──────────────────────────────────────────────────────────────────────────── */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 40;
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 420px;
+    background: var(--n-bg);
+    border-left: 1px solid var(--n-border);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.08);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ── Panel Header ── */
+.panelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--n-border);
+    flex-shrink: 0;
+}
+
+.panelSeverity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.panelSevIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--n-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.panelEntity {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--n-text);
+}
+
+.panelSevLabel {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.panelClose {
+    background: none;
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--n-text-3);
+    cursor: pointer;
+    transition: all 0.1s;
+    flex-shrink: 0;
+    font-family: inherit;
+}
+
+.panelClose:hover {
+    background: var(--n-bg-hover);
+    color: var(--n-text);
+}
+
+/* ── Panel Body ── */
+.panelBody {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.panelSection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.panelSectionLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--n-text-3);
+}
+
+.panelSectionCount {
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    border-radius: 10px;
+    font-size: 10px;
+    padding: 1px 6px;
+    color: var(--n-text-3);
+}
+
+.panelMessage {
+    font-size: 14px;
+    color: var(--n-text);
+    line-height: 1.6;
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    padding: 12px 14px;
+    margin: 0;
+}
+
+.panelSuggestion {
+    font-size: 13px;
+    color: var(--n-text-2);
+    line-height: 1.6;
+    padding: 10px 14px;
+    background: #f0fff4;
+    border: 1px solid #c3e6cb;
+    border-radius: var(--n-radius);
+    margin: 0;
+}
+
+.panelDocs {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.panelDocId {
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    padding: 4px 8px;
+    border-radius: 3px;
+    color: var(--n-text-2);
+    display: block;
+}
+
+.panelRuleFull {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--n-text-2);
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    padding: 6px 10px;
+    border-radius: 3px;
+    display: block;
+}
+
+.panelConnector {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--n-text-2);
+    background: var(--n-bg-muted);
+    border: 1px solid var(--n-border);
+    padding: 4px 10px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* ── Panel Footer ── */
+.panelFooter {
+    padding: 16px 20px;
+    border-top: 1px solid var(--n-border);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.panelFooterHint {
+    font-size: 12px;
+    color: var(--n-text-3);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.copyBtn {
+    background: var(--n-text);
+    color: var(--n-bg);
+    border: none;
+    border-radius: var(--n-radius);
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.1s;
+    font-family: inherit;
+    width: 100%;
+}
+
+.copyBtn:hover {
+    opacity: 0.85;
 }
