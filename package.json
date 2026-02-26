@@ -1,6 +1,6 @@
 {
   "name": "lintbase",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ESLint for your database — catch schema drift, security issues, and cost leaks in NoSQL.",
   "main": "dist/index.js",
   "bin": {
