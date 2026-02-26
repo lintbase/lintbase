@@ -1,11 +1,31 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../../lib/auth';
 import styles from './page.module.css';
 
 export default function SettingsPage() {
     const { user, apiKey, plan, signOut } = useAuth();
     const [copied, setCopied] = useState(false);
+    const [upgrading, setUpgrading] = useState(false);
+    const [toast, setToast] = useState<{ type: 'success' | 'error' | 'info'; msg: string } | null>(null);
+
+    // Show toast from Stripe redirect (?success=true or ?canceled=true)
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('success') === 'true') {
+            setToast({ type: 'success', msg: '🎉 Welcome to Pro! Your plan has been upgraded.' });
+            window.history.replaceState({}, '', '/dashboard/settings');
+        } else if (params.get('canceled') === 'true') {
+            setToast({ type: 'info', msg: "Upgrade canceled \u2014 you're still on the Free plan." });
+            window.history.replaceState({}, '', '/dashboard/settings');
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!toast) return;
+        const t = setTimeout(() => setToast(null), 5000);
+        return () => clearTimeout(t);
+    }, [toast]);
 
     function copyKey() {
         if (!apiKey) return;
@@ -14,8 +34,39 @@ export default function SettingsPage() {
         setTimeout(() => setCopied(false), 2000);
     }
 
+    async function handleUpgrade() {
+        if (!user) return;
+        setUpgrading(true);
+        try {
+            const res = await fetch('/api/stripe/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: user.uid, email: user.email }),
+            });
+            const data = await res.json() as { url?: string; error?: string };
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                setToast({ type: 'error', msg: data.error ?? 'Something went wrong. Try again.' });
+                setUpgrading(false);
+            }
+        } catch {
+            setToast({ type: 'error', msg: 'Network error. Please try again.' });
+            setUpgrading(false);
+        }
+    }
+
     return (
         <div className={styles.page}>
+
+            {/* Toast */}
+            {toast && (
+                <div className={`${styles.toast} ${styles[`toast_${toast.type}`]}`}>
+                    {toast.msg}
+                    <button className={styles.toastClose} onClick={() => setToast(null)}>✕</button>
+                </div>
+            )}
+
             <div className={styles.pageHeader}>
                 <h1 className={styles.pageTitle}>Settings</h1>
                 <p className={styles.pageSub}>Manage your account, API access, and preferences</p>
@@ -82,26 +133,33 @@ export default function SettingsPage() {
                             </div>
                         </div>
                         <span className={styles.planBadge} style={plan === 'pro' ? { color: '#28a745', borderColor: '#c3e6cb', background: '#f0fff4' } : {}}>
-                            {plan === 'pro' ? 'Active' : 'Current plan'}
+                            {plan === 'pro' ? '✓ Active' : 'Current plan'}
                         </span>
                     </div>
-                    <div className={styles.planDivider} />
+
                     {plan === 'free' && (
-                        <div className={styles.proRow}>
-                            <div>
-                                <div className={styles.proName}>Pro — <strong>$39/month</strong></div>
-                                <ul className={styles.proList}>
-                                    <li>90-day historical trends</li>
-                                    <li>Slack &amp; email alerts</li>
-                                    <li>PDF / CSV exports</li>
-                                    <li>Unlimited scans</li>
-                                </ul>
+                        <>
+                            <div className={styles.planDivider} />
+                            <div className={styles.proRow}>
+                                <div>
+                                    <div className={styles.proName}>Pro — <strong>$39/month</strong></div>
+                                    <ul className={styles.proList}>
+                                        <li>90-day historical trends</li>
+                                        <li>Slack &amp; email alerts</li>
+                                        <li>PDF / CSV exports</li>
+                                        <li>Unlimited scans</li>
+                                    </ul>
+                                </div>
+                                <button
+                                    className={styles.upgradeBtn}
+                                    onClick={handleUpgrade}
+                                    disabled={upgrading}
+                                >
+                                    {upgrading ? 'Redirecting…' : 'Upgrade to Pro'}
+                                    {!upgrading && <span className={styles.upgradeNote}>$39 / month</span>}
+                                </button>
                             </div>
-                            <button className={styles.upgradeBtn} disabled>
-                                Upgrade to Pro
-                                <span className={styles.upgradeNote}>Coming soon</span>
-                            </button>
-                        </div>
+                        </>
                     )}
                 </div>
             </section>
