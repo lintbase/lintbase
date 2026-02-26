@@ -11,7 +11,7 @@ import {
     getDoc,
     type Timestamp,
 } from 'firebase/firestore';
-import { db } from './firebase';
+import { getFirebaseDb } from './firebase';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -54,7 +54,7 @@ export async function getRecentScans(
     count = 20
 ): Promise<StoredScan[]> {
     const q = query(
-        collection(db, 'users', userId, 'scans'),
+        collection(getFirebaseDb(), 'users', userId, 'scans'),
         orderBy('createdAt', 'desc'),
         limit(count)
     );
@@ -67,7 +67,7 @@ export async function getScan(
     userId: string,
     scanId: string
 ): Promise<StoredScanDetail | null> {
-    const snap = await getDoc(doc(db, 'users', userId, 'scans', scanId));
+    const snap = await getDoc(doc(getFirebaseDb(), 'users', userId, 'scans', scanId));
     if (!snap.exists()) return null;
     return { id: snap.id, ...snap.data() } as StoredScanDetail;
 }

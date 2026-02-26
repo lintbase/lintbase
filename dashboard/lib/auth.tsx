@@ -23,7 +23,7 @@ import {
     serverTimestamp,
 } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import { auth, db } from './firebase';
+import { getFirebaseAuth, getFirebaseDb } from './firebase';
 
 interface AuthContextValue {
     user: User | null;
@@ -41,12 +41,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [apiKey, setApiKey] = useState<string | null>(null);
 
     useEffect(() => {
-        const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+        const unsub = onAuthStateChanged(getFirebaseAuth(), async (firebaseUser) => {
             setUser(firebaseUser);
 
             if (firebaseUser) {
                 // Ensure a user document exists and has an API key
-                const userRef = doc(db, 'users', firebaseUser.uid);
+                const userRef = doc(getFirebaseDb(), 'users', firebaseUser.uid);
                 const snap = await getDoc(userRef);
 
                 if (!snap.exists()) {
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         createdAt: serverTimestamp(),
                     });
                     // Register the API key for fast lookup from the CLI
-                    await setDoc(doc(db, 'apiKeys', newApiKey), {
+                    await setDoc(doc(getFirebaseDb(), 'apiKeys', newApiKey), {
                         userId: firebaseUser.uid,
                         createdAt: serverTimestamp(),
                     });
@@ -79,11 +79,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const signInWithGoogle = async () => {
         const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
+        await signInWithPopup(getFirebaseAuth(), provider);
     };
 
     const signOut = async () => {
-        await firebaseSignOut(auth);
+        await firebaseSignOut(getFirebaseAuth());
     };
 
     return (
