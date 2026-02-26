@@ -267,14 +267,27 @@ program
                             body: JSON.stringify(report),
                         });
                         if (res.ok) {
-                            const data = await res.json() as { scanId?: string };
-                            saveSpinner.succeed(
-                                chalk.green('Report saved to dashboard') +
-                                chalk.dim(` · scanId: ${data.scanId ?? 'unknown'}`)
-                            );
+                            try {
+                                const data = await res.json() as { scanId?: string };
+                                saveSpinner.succeed(
+                                    chalk.green('Report saved to dashboard') +
+                                    chalk.dim(` · scanId: ${data.scanId ?? 'unknown'}`)
+                                );
+                            } catch {
+                                saveSpinner.succeed(chalk.green(`Report saved (HTTP ${res.status})`));
+                            }
                         } else {
-                            const data = await res.json() as { error?: string };
-                            saveSpinner.fail(chalk.red(`Dashboard rejected the report: ${data.error ?? res.status}`));
+                            // Read raw text first so a non-JSON error page doesn't crash us
+                            const rawText = await res.text();
+                            let errorMsg: string;
+                            try {
+                                const data = JSON.parse(rawText) as { error?: string };
+                                errorMsg = data.error ?? `HTTP ${res.status}`;
+                            } catch {
+                                // Server returned HTML (e.g. Vercel 500 page) — show status + snippet
+                                errorMsg = `HTTP ${res.status} — ${rawText.slice(0, 120).replace(/\s+/g, ' ')}`;
+                            }
+                            saveSpinner.fail(chalk.red(`Dashboard rejected the report: ${errorMsg}`));
                         }
                     }
                 } catch (err) {
