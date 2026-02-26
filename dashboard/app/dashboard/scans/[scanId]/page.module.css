@@ -658,3 +658,31 @@
 .copyBtn:hover {
     opacity: 0.85;
 }
+/* ── Export CSV button ── */
+.exportBtn {
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    color: var(--n-text-2);
+    border-radius: var(--n-radius);
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.1s;
+    white-space: nowrap;
+}
+.exportBtn:hover { background: var(--n-bg-hover); color: var(--n-text); }
+.exportBtnLocked {
+    border: 1px solid var(--n-border);
+    color: var(--n-text-3);
+    border-radius: var(--n-radius);
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: 0.6;
+    display: inline-block;
+}
+.exportBtnLocked:hover { opacity: 1; }

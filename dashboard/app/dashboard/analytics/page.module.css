@@ -1,0 +1,256 @@
+/* app/dashboard/analytics/page.module.css */
+
+.page {
+    padding: 40px 48px;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.pageHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--n-border);
+    padding-bottom: 20px;
+}
+
+.pageTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--n-text);
+    letter-spacing: -0.4px;
+}
+
+.pageSub {
+    font-size: 13px;
+    color: var(--n-text-3);
+    margin-top: 3px;
+}
+
+/* ── Trend badge ── */
+.trendBadge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+}
+
+.trend_improving {
+    color: #22C55E;
+    border-color: #bbf7d0;
+    background: #f0fff4;
+}
+
+.trend_worsening {
+    color: #EF4444;
+    border-color: #fecaca;
+    background: #fff5f5;
+}
+
+.trend_stable {
+    color: var(--n-text-3);
+    border-color: var(--n-border);
+    background: var(--n-bg-muted);
+}
+
+/* ── Pro gate ── */
+.proGate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 64px 40px;
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    background: var(--n-bg);
+}
+
+.gateIcon {
+    font-size: 40px;
+    margin-bottom: 16px;
+}
+
+.gateTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--n-text);
+    margin-bottom: 10px;
+}
+
+.gateSub {
+    font-size: 14px;
+    color: var(--n-text-3);
+    max-width: 420px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.gateBtn {
+    background: var(--n-text);
+    color: var(--n-bg);
+    padding: 10px 24px;
+    border-radius: var(--n-radius);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.1s;
+}
+
+.gateBtn:hover {
+    opacity: 0.85;
+}
+
+.gateNote {
+    font-size: 12px;
+    color: var(--n-text-3);
+    margin-top: 12px;
+}
+
+/* ── KPI row ── */
+.kpiRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.kpiCard {
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    padding: 20px;
+    box-shadow: var(--n-shadow);
+}
+
+.kpiLabel {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--n-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+}
+
+.kpiValue {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.kpiSub {
+    font-size: 11px;
+    color: var(--n-text-3);
+}
+
+/* ── Charts ── */
+.chartCard {
+    background: var(--n-bg);
+    border: 1px solid var(--n-border);
+    border-radius: var(--n-radius);
+    padding: 20px 24px;
+    box-shadow: var(--n-shadow);
+}
+
+.chartHeader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.chartTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--n-text);
+}
+
+.chartSub {
+    font-size: 12px;
+    color: var(--n-text-3);
+}
+
+/* ── Scan table ── */
+.scanTable {
+    display: flex;
+    flex-direction: column;
+}
+
+.scanRow {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 10px 0;
+    font-size: 13px;
+    color: var(--n-text-2);
+    border-bottom: 1px solid var(--n-border);
+}
+
+.scanRow:last-child {
+    border-bottom: none;
+}
+
+.scanRowHeader {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--n-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 8px;
+}
+
+.scanRowClickable {
+    cursor: pointer;
+    transition: background 0.1s;
+    border-radius: 4px;
+    padding: 10px 4px;
+}
+
+.scanRowClickable:hover {
+    background: var(--n-bg-hover);
+}
+
+.dateCell {
+    font-size: 12px;
+    color: var(--n-text-3);
+}
+
+/* ── States ── */
+.loading {
+    color: var(--n-text-3);
+    font-size: 14px;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.empty {
+    text-align: center;
+    padding: 60px 0;
+}
+
+.emptyIcon {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.emptyTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--n-text);
+    margin-bottom: 6px;
+}
+
+.emptySub {
+    font-size: 13px;
+    color: var(--n-text-3);
+}
+
+.emptySub code {
+    font-family: monospace;
+    background: var(--n-bg-muted);
+    padding: 1px 4px;
+    border-radius: 3px;
+}

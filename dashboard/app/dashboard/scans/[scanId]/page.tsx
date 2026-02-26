@@ -33,7 +33,7 @@ const SEV_BG: Record<string, string> = { error: '#fff5f5', warning: '#fff8f0', i
 const SEV_LABEL: Record<string, string> = { error: 'Error', warning: 'Warning', info: 'Info' };
 
 export default function ScanDetailPage() {
-    const { user } = useAuth();
+    const { user, plan } = useAuth();
     const params = useParams();
     const scanId = params?.scanId as string;
 
@@ -73,6 +73,29 @@ export default function ScanDetailPage() {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     }, [selected, scan]);
+
+    function exportCsv() {
+        if (!scan) return;
+        const rows = [
+            ['Severity', 'Entity', 'Rule', 'Message', 'Suggestion', 'Affected Records'],
+            ...((scan.issues ?? []) as Issue[]).map(i => [
+                i.severity,
+                i.collection,
+                i.rule,
+                `"${i.message.replace(/"/g, '""')}"`,
+                `"${(i.suggestion ?? '').replace(/"/g, '""')}"`,
+                `"${(i.affectedDocuments ?? []).join(', ')}"`,
+            ]),
+        ];
+        const csv = rows.map(r => r.join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `lintbase-scan-${scanId}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
 
     if (loading) return (
         <div className={styles.loading}>
@@ -149,6 +172,15 @@ export default function ScanDetailPage() {
                         <span className={styles.scoreNum}>{score}</span>
                         <span className={styles.scoreLabel}>{riskLevel(score)}</span>
                     </div>
+                    {plan === 'pro' ? (
+                        <button className={styles.exportBtn} onClick={exportCsv} title="Export issues as CSV">
+                            ↓ Export CSV
+                        </button>
+                    ) : (
+                        <a href="/dashboard/settings" className={styles.exportBtnLocked} title="Pro feature — upgrade to export">
+                            🔒 Export CSV
+                        </a>
+                    )}
                 </div>
 
                 {/* ── Summary row ── */}
