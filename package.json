@@ -1,10 +1,10 @@
 {
   "name": "lintbase",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ESLint for your database — catch schema drift, security issues, and cost leaks in NoSQL.",
   "main": "dist/index.js",
   "bin": {
-    "lintbase": "./dist/index.js"
+    "lintbase": "dist/index.js"
   },
   "files": [
     "dist/**/*",
@@ -36,7 +36,7 @@
   "homepage": "https://lintbase.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lintbase/lintbase.git"
+    "url": "git+https://github.com/lintbase/lintbase.git"
   },
   "bugs": {
     "url": "https://github.com/lintbase/lintbase/issues"
