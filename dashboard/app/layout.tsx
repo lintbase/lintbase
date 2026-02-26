@@ -1,6 +1,14 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import './globals.css';
-import { AuthProvider } from '../lib/auth';
+
+// AuthProvider uses Firebase which is browser-only.
+// ssr: false ensures it NEVER runs during server-side rendering/static generation,
+// so the build passes even without NEXT_PUBLIC_FIREBASE_* env vars.
+const AuthProvider = dynamic(
+  () => import('../lib/auth').then((m) => ({ default: m.AuthProvider })),
+  { ssr: false }
+);
 
 export const metadata: Metadata = {
   title: 'LintBase — ESLint for your database',
