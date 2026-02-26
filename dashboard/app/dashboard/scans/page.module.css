@@ -1,0 +1,192 @@
+/* app/dashboard/scans/page.module.css */
+
+.page {
+    padding: 40px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.7px;
+    margin-bottom: 4px;
+}
+
+.sub {
+    font-size: 14px;
+    color: var(--text-3);
+}
+
+/* ── Controls ────────────────────────────────────────────────────────────── */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.filterBtn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.filterBtn:hover {
+    border-color: var(--border-brand);
+    color: var(--text);
+}
+
+.filterBtnActive {
+    background: rgba(124, 58, 237, 0.12);
+    color: var(--brand-light);
+    border-color: var(--border-brand);
+}
+
+.sortRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sortLabel {
+    font-size: 13px;
+    color: var(--text-3);
+    margin-right: 4px;
+}
+
+.sortBtn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.sortBtn:hover {
+    border-color: var(--border-brand);
+    color: var(--text);
+}
+
+.sortBtnActive {
+    background: rgba(124, 58, 237, 0.12);
+    color: var(--brand-light);
+    border-color: var(--border-brand);
+}
+
+/* ── Table ───────────────────────────────────────────────────────────────── */
+.table {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.tableRow {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 1fr 0.8fr 0.8fr 0.8fr;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    transition: background 0.15s;
+}
+
+.tableRow:last-child {
+    border-bottom: none;
+}
+
+.tableRow:not(.tableHeader):hover {
+    background: var(--bg-2);
+}
+
+.tableHeader {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-3);
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
+}
+
+.dateCell {
+    font-size: 13px;
+    color: var(--text-2);
+}
+
+.numCell {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+}
+
+.riskBadge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+}
+
+/* ── Empty / Loading ─────────────────────────────────────────────────────── */
+.loading {
+    padding: 60px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-3);
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.empty {
+    text-align: center;
+    padding: 56px 32px;
+    background: var(--bg-1);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+}
+
+.emptyIcon {
+    font-size: 40px;
+    margin-bottom: 16px;
+}
+
+.emptyTitle {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.emptySub {
+    font-size: 14px;
+    color: var(--text-2);
+}

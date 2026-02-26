@@ -1,0 +1,40 @@
+{
+  "name": "lintbase",
+  "version": "0.1.0",
+  "description": "ESLint for your database — catch schema drift, security issues, and cost leaks in NoSQL.",
+  "main": "dist/index.js",
+  "bin": {
+    "lintbase": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "echo \"No linter configured yet\""
+  },
+  "keywords": [
+    "lintbase",
+    "firestore",
+    "nosql",
+    "database",
+    "lint",
+    "cli"
+  ],
+  "author": "Mamadou Dia",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.3",
+    "commander": "^12.0.0",
+    "firebase-admin": "^12.0.0",
+    "ora": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "vitest": "^4.0.18"
+  }
+}
