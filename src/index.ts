@@ -37,7 +37,7 @@ interface ScanOptions {
     json: boolean;
     ignore: string[];      // repeatable: --ignore schema/sparse-field --ignore cost/redundant-collections
     collection: string[];  // repeatable: --collection Users --collection Baux
-    save?: string;         // --save https://lintbase.com  → POST report to /api/scans
+    save?: string;         // --save https://www.lintbase.com  → POST report to /api/scans
     token?: string;        // --token <api-key>            → Authorization: Bearer header
 }
 
@@ -63,7 +63,7 @@ program
     .option('--json', 'Output the report as JSON (stdout only — great for CI/CD pipes)')
     .option('--ignore <rule>', 'Ignore a specific rule (repeatable)', collect, [] as string[])
     .option('--collection <name>', 'Only scan this collection (repeatable)', collect, [] as string[])
-    .option('--save <url>', 'Push scan results to a LintBase dashboard (e.g. --save https://lintbase.com)')
+    .option('--save <url>', 'Push scan results to a LintBase dashboard (e.g. --save https://www.lintbase.com)')
     .option('--token <apiKey>', 'API key for --save authentication (from your dashboard settings)')
     .action(async (database: string, options: ScanOptions) => {
         const jsonMode = options.json;

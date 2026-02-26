@@ -133,7 +133,7 @@ export default function DashboardOverview() {
                             <span style={{ color: 'var(--brand-light)' }}>$ </span>
                             npx lintbase scan firestore \<br />
                             &nbsp;&nbsp;--key ./service-account.json \<br />
-                            &nbsp;&nbsp;--save https://lintbase.com \<br />
+                            &nbsp;&nbsp;--save https://www.lintbase.com \<br />
                             &nbsp;&nbsp;--token {apiKey ? apiKey.slice(0, 8) + '••••••••' : '<your-api-key>'}
                         </div>
                     </div>
@@ -186,7 +186,7 @@ export default function DashboardOverview() {
                 </div>
                 <div className={styles.cliExample}>
                     <code>
-                        npx lintbase scan firestore --key ./sa.json --save https://lintbase.com --token {apiKey?.slice(0, 8) ?? '••••'}…
+                        npx lintbase scan firestore --key ./sa.json --save https://www.lintbase.com --token {apiKey?.slice(0, 8) ?? '••••'}…
                     </code>
                 </div>
             </div>
