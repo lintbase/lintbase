@@ -1,12 +1,11 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../../lib/auth';
 import styles from './page.module.css';
 
 export default function SettingsPage() {
-    const { user, signOut } = useAuth();
+    const { user, apiKey, signOut } = useAuth();
     const [copied, setCopied] = useState(false);
-    const apiKey = user?.uid ? `lintbase_${user.uid.slice(0, 16)}` : null; // Display placeholder; real key shown from Firestore via API key collection
 
     function copyKey() {
         if (!apiKey) return;
@@ -49,7 +48,7 @@ export default function SettingsPage() {
                 <div className={styles.card}>
                     <div className={styles.keyRow}>
                         <code className={styles.keyValue}>
-                            {apiKey ?? 'No API key found — run a scan first.'}
+                            {apiKey ?? 'Loading…'}
                         </code>
                         {apiKey && (
                             <button className={styles.copyBtn} onClick={copyKey}>
@@ -99,7 +98,7 @@ export default function SettingsPage() {
                 </div>
             </section>
 
-            {/* ── Danger zone ── */}
+            {/* ── Session ── */}
             <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Session</h2>
                 <div className={styles.card}>

@@ -412,7 +412,7 @@ export default function DashboardPage() {
                             </div>
                             <div className={styles.cliExample}>
                                 <code>
-                                    npx lintbase scan firestore --key ./sa.json --save https://www.lintbase.com --token {apiKey.slice(0, 8)}••••••••
+                                    npx lintbase scan firestore --key ./serviceAccount.json --save https://www.lintbase.com --token {apiKey.slice(0, 8)}••••••••
                                 </code>
                             </div>
                         </>
