@@ -16,8 +16,7 @@ npx lintbase scan firestore --key ./service-account.json
 | Document sampling (with billing guard) | ✅ |
 | Beautiful terminal output | ✅ |
 | Depth & size metrics per collection | ✅ |
-| Analyzers (schema drift, security, cost) | 🔜 Phase 2 |
-| SaaS dashboard + Slack alerts | 🔜 Phase 3 |
+
 
 ---
 
