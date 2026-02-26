@@ -13,7 +13,8 @@ export default function LandingPage() {
           <li><a href="#features">Features</a></li>
           <li><a href="#how-it-works">How it works</a></li>
           <li><a href="#pricing">Pricing</a></li>
-          <li><a href="https://github.com/mamadoudia/lintbase" target="_blank" rel="noreferrer">GitHub</a></li>
+          <li><a href="https://github.com/lintbase/lintbase" target="_blank" rel="noreferrer">GitHub</a></li>
+          <li><a href="https://x.com/DiaNClabs" target="_blank" rel="noreferrer">𝕏</a></li>
         </ul>
         <div className={styles.navCta}>
           <a href="/sign-in" className={styles.btnGhost}>Sign in</a>
@@ -381,8 +382,9 @@ export default function LandingPage() {
               Lint<span>Base</span>
             </div>
             <ul className={styles.footerLinks}>
-              <li><a href="https://github.com/mamadoudia/lintbase">GitHub</a></li>
-              <li><a href="https://www.npmjs.com/package/lintbase">npm</a></li>
+              <li><a href="https://github.com/lintbase/lintbase" target="_blank" rel="noreferrer">GitHub</a></li>
+              <li><a href="https://www.npmjs.com/package/lintbase" target="_blank" rel="noreferrer">npm</a></li>
+              <li><a href="https://x.com/DiaNClabs" target="_blank" rel="noreferrer">𝕏 @DiaNClabs</a></li>
               <li><a href="/privacy">Privacy</a></li>
               <li><a href="/terms">Terms</a></li>
             </ul>
