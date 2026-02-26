@@ -2,41 +2,76 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-/* ── Tokens ─────────────────────────────────────────────────────────────── */
+/* ── Dark tokens (landing page) ──────────────────────────────────────────── */
 :root {
-  --brand:        #7C3AED;
-  --brand-light:  #A78BFA;
-  --brand-dark:   #5B21B6;
-  --brand-glow:   rgba(124, 58, 237, 0.35);
+  --brand: #7C3AED;
+  --brand-light: #A78BFA;
+  --brand-dark: #5B21B6;
+  --brand-glow: rgba(124, 58, 237, 0.35);
 
-  --bg:           #09090B;
-  --bg-1:         #111113;
-  --bg-2:         #18181B;
-  --bg-3:         #27272A;
-  --border:       rgba(255,255,255,0.08);
+  --bg: #09090B;
+  --bg-1: #111113;
+  --bg-2: #18181B;
+  --bg-3: #27272A;
+  --border: rgba(255, 255, 255, 0.08);
   --border-brand: rgba(124, 58, 237, 0.4);
 
-  --text:         #FAFAFA;
-  --text-2:       #A1A1AA;
-  --text-3:       #71717A;
+  --text: #FAFAFA;
+  --text-2: #A1A1AA;
+  --text-3: #71717A;
 
-  --red:          #EF4444;
-  --yellow:       #F59E0B;
-  --green:        #22C55E;
-  --cyan:         #06B6D4;
+  --red: #EF4444;
+  --yellow: #F59E0B;
+  --green: #22C55E;
+  --cyan: #06B6D4;
 
-  --radius-sm:    6px;
-  --radius:       12px;
-  --radius-lg:    20px;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
 
   --shadow-brand: 0 0 40px rgba(124, 58, 237, 0.2);
-  --shadow-card:  0 4px 24px rgba(0,0,0,0.4);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+
+  /* ── Notion light tokens (dashboard only) ─────────────────────────────── */
+  --n-bg: #ffffff;
+  --n-bg-muted: #f7f6f3;
+  --n-bg-hover: rgba(55, 53, 47, 0.04);
+  --n-bg-selected: rgba(55, 53, 47, 0.08);
+
+  --n-text: #37352f;
+  --n-text-2: #64564b;
+  --n-text-3: #9b9a97;
+
+  --n-border: #e9e9e7;
+  --n-border-2: #d9d9d6;
+
+  --n-radius: 4px;
+  --n-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --n-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  --n-critical: #d73a49;
+  --n-warning: #f66a0a;
+  --n-success: #28a745;
+  --n-info: #0366d6;
+
+  --n-critical-bg: #fff5f5;
+  --n-warning-bg: #fff8f0;
+  --n-success-bg: #f0fff4;
+  --n-info-bg: #f0f6ff;
 }
 
 /* ── Reset ───────────────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -46,8 +81,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: inherit; text-decoration: none; }
-img, video { display: block; max-width: 100%; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
 
 /* ── Utility ─────────────────────────────────────────────────────────────── */
 .container {
@@ -57,7 +100,9 @@ img, video { display: block; max-width: 100%; }
   padding: 0 24px;
 }
 
-.mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+.mono {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
 
 /* ── Noise texture overlay ──────────────────────────────────────────────── */
 body::before {
@@ -70,6 +115,15 @@ body::before {
 }
 
 /* ── Scrollbar ───────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-1); }
-::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 3px; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-3);
+  border-radius: 3px;
+}

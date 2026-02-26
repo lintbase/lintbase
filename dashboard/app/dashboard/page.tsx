@@ -7,10 +7,24 @@ import {
 import { useAuth } from '../../lib/auth';
 import {
     getRecentScans, getLatestScanDetail,
-    riskLevel, riskColor, formatDate,
+    riskLevel, formatDate,
 } from '../../lib/db';
 import type { StoredScan, StoredScanDetail } from '../../lib/db';
 import styles from './page.module.css';
+
+// Notion-palette risk colors (muted, not vibrant)
+function notionRiskColor(score: number): string {
+    if (score >= 80) return '#d73a49';
+    if (score >= 60) return '#f66a0a';
+    if (score >= 40) return '#dbab09';
+    return '#28a745';
+}
+function notionRiskBg(score: number): string {
+    if (score >= 80) return '#fff5f5';
+    if (score >= 60) return '#fff8f0';
+    if (score >= 40) return '#fffbf0';
+    return '#f0fff4';
+}
 
 // ── Types ────────────────────────────────────────────────────────────────────
 interface ScanSummary {
@@ -37,7 +51,7 @@ function RiskTooltip({ active, payload, label }: { active?: boolean; payload?: A
     return (
         <div className={styles.tooltip}>
             <div className={styles.tooltipDate}>{label}</div>
-            <div className={styles.tooltipScore} style={{ color: riskColor(score) }}>
+            <div className={styles.tooltipScore} style={{ color: notionRiskColor(score) }}>
                 {score}/100 {riskLevel(score)}
             </div>
         </div>
@@ -124,6 +138,14 @@ export default function DashboardPage() {
         ? Math.round(scans.reduce((s, sc) => s + ((sc.summary as ScanSummary).riskScore ?? 0), 0) / scans.length)
         : 0;
 
+    // Chart theme constants (Notion light)
+    const GRID = 'rgba(0,0,0,0.06)';
+    const AXIS = '#9b9a97';
+    const C_ERROR = '#d73a49';
+    const C_WARN = '#f66a0a';
+    const C_INFO = '#0366d6';
+    const C_RISK = '#6e40c9';
+
     if (loading) {
         return (
             <div className={styles.loadingWrap}>
@@ -152,21 +174,25 @@ export default function DashboardPage() {
 
     return (
         <div className={styles.page}>
+            <div className={styles.pageHeader}>
+                <h1 className={styles.pageTitle}>Overview</h1>
+                <p className={styles.pageSub}>Database health across {scans.length} scan{scans.length !== 1 ? 's' : ''} · Last run {scans.length ? formatDate(scans[0].scannedAt) : '—'}</p>
+            </div>
 
             {/* ── Summary Cards ──────────────────────────────────────────── */}
             <div className={styles.cards}>
                 <div className={styles.card}>
                     <div className={styles.cardLabel}>Latest Risk Score</div>
-                    <div className={styles.cardValue} style={{ color: riskColor(currentRisk) }}>
+                    <div className={styles.cardValue} style={{ color: notionRiskColor(currentRisk) }}>
                         {currentRisk}<span className={styles.cardUnit}>/100</span>
                     </div>
-                    <div className={styles.cardBadge} style={{ background: riskColor(currentRisk) + '22', color: riskColor(currentRisk) }}>
+                    <div className={styles.cardBadge} style={{ background: notionRiskBg(currentRisk), color: notionRiskColor(currentRisk) }}>
                         {riskLevel(currentRisk)}
                     </div>
                 </div>
                 <div className={styles.card}>
                     <div className={styles.cardLabel}>Avg Risk (all scans)</div>
-                    <div className={styles.cardValue} style={{ color: riskColor(avgRisk) }}>
+                    <div className={styles.cardValue} style={{ color: notionRiskColor(avgRisk) }}>
                         {avgRisk}<span className={styles.cardUnit}>/100</span>
                     </div>
                     <div className={styles.cardSub}>{scans.length} scan{scans.length !== 1 ? 's' : ''} tracked</div>
@@ -202,15 +228,15 @@ export default function DashboardPage() {
                         <AreaChart data={timelineData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                             <defs>
                                 <linearGradient id="riskGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.3} />
-                                    <stop offset="95%" stopColor="#7C3AED" stopOpacity={0} />
+                                    <stop offset="5%" stopColor={C_RISK} stopOpacity={0.15} />
+                                    <stop offset="95%" stopColor={C_RISK} stopOpacity={0} />
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                            <XAxis dataKey="date" tick={{ fill: '#6B7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-                            <YAxis domain={[0, 100]} tick={{ fill: '#6B7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
+                            <XAxis dataKey="date" tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} />
+                            <YAxis domain={[0, 100]} tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} />
                             <Tooltip content={<RiskTooltip />} />
-                            <Area type="monotone" dataKey="risk" stroke="#7C3AED" strokeWidth={2} fill="url(#riskGrad)" dot={{ fill: '#7C3AED', strokeWidth: 0, r: 3 }} activeDot={{ r: 5 }} />
+                            <Area type="monotone" dataKey="risk" stroke={C_RISK} strokeWidth={2} fill="url(#riskGrad)" dot={{ fill: C_RISK, strokeWidth: 0, r: 3 }} activeDot={{ r: 5 }} />
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>
@@ -223,14 +249,14 @@ export default function DashboardPage() {
                     </div>
                     <ResponsiveContainer width="100%" height={220}>
                         <BarChart data={issueTrendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                            <XAxis dataKey="date" tick={{ fill: '#6B7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-                            <YAxis tick={{ fill: '#6B7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke={GRID} />
+                            <XAxis dataKey="date" tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} />
+                            <YAxis tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} />
                             <Tooltip content={<IssueTooltip />} />
-                            <Legend wrapperStyle={{ fontSize: 11, color: '#9CA3AF' }} />
-                            <Bar dataKey="Errors" stackId="a" fill="#EF4444" radius={[0, 0, 0, 0]} />
-                            <Bar dataKey="Warnings" stackId="a" fill="#F59E0B" />
-                            <Bar dataKey="Infos" stackId="a" fill="#06B6D4" radius={[3, 3, 0, 0]} />
+                            <Legend wrapperStyle={{ fontSize: 11, color: AXIS }} />
+                            <Bar dataKey="Errors" stackId="a" fill={C_ERROR} />
+                            <Bar dataKey="Warnings" stackId="a" fill={C_WARN} />
+                            <Bar dataKey="Infos" stackId="a" fill={C_INFO} radius={[2, 2, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -249,14 +275,14 @@ export default function DashboardPage() {
                             data={collectionData}
                             margin={{ top: 5, right: 20, left: 80, bottom: 5 }}
                         >
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" horizontal={false} />
-                            <XAxis type="number" tick={{ fill: '#6B7280', fontSize: 11 }} axisLine={false} tickLine={false} />
-                            <YAxis type="category" dataKey="name" tick={{ fill: '#E5E7EB', fontSize: 12 }} axisLine={false} tickLine={false} width={75} />
+                            <CartesianGrid strokeDasharray="3 3" stroke={GRID} horizontal={false} />
+                            <XAxis type="number" tick={{ fill: AXIS, fontSize: 11 }} axisLine={false} tickLine={false} />
+                            <YAxis type="category" dataKey="name" tick={{ fill: '#37352f', fontSize: 12 }} axisLine={false} tickLine={false} width={75} />
                             <Tooltip content={<IssueTooltip />} />
-                            <Legend wrapperStyle={{ fontSize: 11, color: '#9CA3AF' }} />
-                            <Bar dataKey="Errors" stackId="a" fill="#EF4444" />
-                            <Bar dataKey="Warnings" stackId="a" fill="#F59E0B" />
-                            <Bar dataKey="Infos" stackId="a" fill="#06B6D4" radius={[0, 3, 3, 0]} />
+                            <Legend wrapperStyle={{ fontSize: 11, color: AXIS }} />
+                            <Bar dataKey="Errors" stackId="a" fill={C_ERROR} />
+                            <Bar dataKey="Warnings" stackId="a" fill={C_WARN} />
+                            <Bar dataKey="Infos" stackId="a" fill={C_INFO} radius={[0, 2, 2, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -314,7 +340,7 @@ export default function DashboardPage() {
                             const score = s.riskScore ?? 0;
                             return (
                                 <div key={scan.id} className={styles.scanRow}>
-                                    <div className={styles.scanBadge} style={{ background: riskColor(score) + '22', color: riskColor(score) }}>
+                                    <div className={styles.scanBadge} style={{ background: notionRiskBg(score), color: notionRiskColor(score), borderColor: notionRiskColor(score) + '33' }}>
                                         {score}
                                     </div>
                                     <div className={styles.scanInfo}>
@@ -325,7 +351,7 @@ export default function DashboardPage() {
                                             <span style={{ color: '#06B6D4' }}>ℹ {s.infos ?? 0}</span>
                                         </div>
                                     </div>
-                                    <div className={styles.scanLevel} style={{ color: riskColor(score) }}>
+                                    <div className={styles.scanLevel} style={{ color: notionRiskColor(score) }}>
                                         {riskLevel(score)}
                                     </div>
                                 </div>
