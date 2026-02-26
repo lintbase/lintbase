@@ -41,6 +41,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [apiKey, setApiKey] = useState<string | null>(null);
 
     useEffect(() => {
+        // Guard: only initialize Firebase if the API key is configured.
+        // Without this, the landing page would crash for visitors even before
+        // Firebase env vars are set in Vercel.
+        if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+            setLoading(false);
+            return;
+        }
+
         const unsub = onAuthStateChanged(getFirebaseAuth(), async (firebaseUser) => {
             setUser(firebaseUser);
 
