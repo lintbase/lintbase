@@ -385,7 +385,7 @@ export default function LandingPage() {
               <li><a href="https://github.com/lintbase/lintbase" target="_blank" rel="noreferrer">GitHub</a></li>
               <li><a href="https://www.npmjs.com/package/lintbase" target="_blank" rel="noreferrer">npm</a></li>
               <li><a href="https://x.com/DiaNClabs" target="_blank" rel="noreferrer">𝕏 @DiaNClabs</a></li>
-              <li><a href="mailto:support@lintbase.com">Contact</a></li>
+              <li><a href="mailto:mamadou.dia_nclabs@icloud.com">Contact</a></li>
             </ul>
             <p className={styles.footerCopy}>© 2026 LintBase. Built by Mamadou Dia.</p>
           </div>
