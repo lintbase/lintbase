@@ -75,6 +75,28 @@ Get your token at **[lintbase.com/dashboard/settings](https://www.lintbase.com/d
 
 ---
 
+## 🤖 AI Agent Integration (MCP)
+
+Using **Cursor, Claude Desktop, or Windsurf**? Install [`lintbase-mcp`](https://www.npmjs.com/package/lintbase-mcp) to give your AI agent real-time Firestore schema context — so it stops hallucinating field names.
+
+Add to `.cursor/mcp.json`:
+```json
+{
+  "mcpServers": {
+    "lintbase": {
+      "command": "npx",
+      "args": ["-y", "lintbase-mcp"]
+    }
+  }
+}
+```
+
+Now when you ask your AI *"add a field to users"*, it will check your **real** schema first before writing a line of code.
+
+→ **[Full setup guide & tools reference](https://www.npmjs.com/package/lintbase-mcp)**
+
+---
+
 ## What it catches
 
 ### 🔒 Security
