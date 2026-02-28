@@ -1,57 +1,13 @@
 {
-  "name": "lintbase",
-  "version": "0.1.2",
-  "description": "ESLint for your database — catch schema drift, security issues, and cost leaks in NoSQL.",
-  "main": "dist/index.js",
-  "bin": {
-    "lintbase": "dist/index.js"
-  },
-  "files": [
-    "dist/**/*",
-    "README.md"
-  ],
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsx src/index.ts",
-    "start": "node dist/index.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "prepublishOnly": "npm test && npm run build"
-  },
-  "keywords": [
-    "lintbase",
-    "firestore",
-    "nosql",
-    "database",
-    "lint",
-    "cli",
-    "schema",
-    "security"
-  ],
-  "author": "Mamadou Dia",
-  "license": "MIT",
-  "homepage": "https://lintbase.com",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lintbase/lintbase.git"
-  },
-  "bugs": {
-    "url": "https://github.com/lintbase/lintbase/issues"
-  },
-  "dependencies": {
-    "chalk": "^4.1.2",
-    "cli-table3": "^0.6.3",
-    "commander": "^12.0.0",
-    "firebase-admin": "^12.0.0",
-    "ora": "^5.4.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "tsx": "^4.7.0",
-    "typescript": "^5.3.0",
-    "vitest": "^4.0.18"
-  }
+    "name": "lintbase-root",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "npm run build --workspaces --if-present",
+        "test": "npm run test --workspaces --if-present",
+        "dev:cli": "npm run dev --workspace=packages/lintbase",
+        "dev:mcp": "npm run dev --workspace=packages/lintbase-mcp"
+    }
 }

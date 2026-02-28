@@ -1,0 +1,53 @@
+{
+    "name": "lintbase-mcp",
+    "version": "0.1.1",
+    "description": "MCP server for LintBase — give AI coding agents real-time database schema context.",
+    "main": "dist/server.js",
+    "bin": {
+        "lintbase-mcp": "dist/server.js"
+    },
+    "files": [
+        "dist/**/*",
+        "README.md"
+    ],
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsx src/server.ts",
+        "start": "node dist/server.js",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [
+        "lintbase",
+        "mcp",
+        "model-context-protocol",
+        "firestore",
+        "database",
+        "schema",
+        "ai",
+        "cursor",
+        "claude"
+    ],
+    "author": "Mamadou Dia",
+    "license": "MIT",
+    "homepage": "https://lintbase.com",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lintbase/lintbase.git"
+    },
+    "bugs": {
+        "url": "https://github.com/lintbase/lintbase/issues"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.27.1",
+        "firebase-admin": "^12.0.0",
+        "zod": "^3.25.76"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "tsx": "^4.7.0",
+        "typescript": "^5.3.0"
+    }
+}
