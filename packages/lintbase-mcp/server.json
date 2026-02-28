@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Madia333/lintbase-mcp",
+  "description": "Real-time Firestore schema context for AI coding agents. Stop hallucinating field names.",
+  "repository": {
+    "url": "https://github.com/lintbase/lintbase",
+    "source": "github",
+    "subfolder": "packages/lintbase-mcp"
+  },
+  "version": "0.1.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "lintbase-mcp",
+      "version": "0.1.2",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
