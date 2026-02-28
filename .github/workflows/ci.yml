@@ -25,9 +25,12 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      # Use npm install (not ci) so npm resolves platform-specific optional
-      # deps (e.g. @rollup/rollup-linux-x64-gnu) correctly on the CI runner.
-      run: npm install
+      # The root package-lock.json is generated on macOS and only contains
+      # macOS optional binaries. We delete it so npm resolves the correct
+      # Linux binary (@rollup/rollup-linux-x64-gnu) for the CI runner.
+      run: |
+        rm -f package-lock.json
+        npm install
 
     - name: Build lintbase CLI
       run: npm run build --workspace=packages/lintbase
