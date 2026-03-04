@@ -30,3 +30,4 @@ Thumbs.db
 dashboard/.next/
 dashboard/node_modules/
 dashboard/.vercel/
+.agent/
