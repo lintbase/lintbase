@@ -1,14 +1,16 @@
 {
     "name": "lintbase-mcp",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "mcpName": "io.github.Madia333/lintbase-mcp",
     "description": "MCP server for LintBase — give AI coding agents real-time database schema context.",
     "main": "dist/server.js",
     "bin": {
-        "lintbase-mcp": "dist/server.js"
+        "lintbase-mcp": "dist/server.js",
+        "lintbase-mcp-install-skill": "skill/install-skill.js"
     },
     "files": [
         "dist/**/*",
+        "skill/**/*",
         "README.md"
     ],
     "engines": {
