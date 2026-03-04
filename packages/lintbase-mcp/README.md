@@ -51,6 +51,20 @@ No hallucinations. No drift. Ground-truth schema, every time.
 
 ---
 
+## 🤖 Agent Skill
+
+Install the LintBase **Agent Skill** into any project so your AI agent automatically uses LintBase before writing Firestore code — no prompting required:
+
+```bash
+npx -p lintbase-mcp lintbase-mcp-install-skill
+```
+
+This copies a `SKILL.md` file into `.agent/skills/lintbase/` in your project. Cursor, Claude Code, Gemini CLI, and other MCP-compatible agents read this file on startup and follow its instructions automatically.
+
+Same format as the [Firebase official Agent Skills](https://firebase.blog/posts/2025/02/firebase-agent-skills). ✅
+
+---
+
 ## Setup
 
 You'll need a [Firebase service account JSON key](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) for your project.
