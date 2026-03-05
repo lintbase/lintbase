@@ -243,6 +243,65 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* ── Schema Map feature section ─────────────────────────────────── */}
+        <section className={styles.section} style={{ background: 'linear-gradient(to bottom, transparent, rgba(124,58,237,0.04), transparent)' }}>
+          <div className="container">
+            <span className={styles.sectionTag}>Dashboard</span>
+            <h2 className={styles.sectionTitle}>Your scan results,<br />visualized.</h2>
+            <p className={styles.sectionSub}>
+              Run a scan locally — credentials never leave your machine. Results are saved and
+              rendered as an interactive schema map in your dashboard.
+            </p>
+
+            <div className={styles.analyzersGrid}>
+              {[
+                {
+                  icon: '⬡',
+                  name: 'Schema Map',
+                  color: '#7C3AED',
+                  desc: 'Every collection surfaces as a card: fields, types, presence rates, and issue badges. Drag to rearrange. Click to open the detail panel.',
+                  rules: ['All collections at a glance', 'Field presence rates', 'Issue badges per card', 'Drag to reposition'],
+                },
+                {
+                  icon: '◎',
+                  name: 'Health Radar',
+                  color: '#0366d6',
+                  desc: 'Per-collection spider chart scoring four dimensions: Schema, Security, Performance, and Cost. See exactly which axis is dragging your score down.',
+                  rules: ['Schema health', 'Security score', 'Performance score', 'Cost score'],
+                },
+                {
+                  icon: '⊕',
+                  name: 'Priority Quadrant',
+                  color: '#f66a0a',
+                  desc: 'A 2×2 bubble chart: impact vs. ease of fix. Collections in the top-right are your highest ROI fixes. Click any bubble to inspect.',
+                  rules: ['Impact vs. ease of fix', 'Bubble size = issue count', 'Color = worst severity', 'Click → detail panel'],
+                },
+                {
+                  icon: '≋',
+                  name: 'Drift Timeline',
+                  color: '#16a34a',
+                  desc: 'Risk score history bar at the bottom of every schema map. Click any past scan to replay its state and see exactly what changed.',
+                  rules: ['Full scan history', 'Risk score trend', 'Click to compare', 'Schema state replay'],
+                },
+              ].map((a) => (
+                <div key={a.name} className={styles.analyzerCard}>
+                  <div className={styles.analyzerAccent} style={{ background: a.color }} />
+                  <div className={styles.analyzerIcon}>{a.icon}</div>
+                  <div className={styles.analyzerName}>{a.name}</div>
+                  <p className={styles.analyzerDesc}>{a.desc}</p>
+                  <ul className={styles.analyzerRules}>
+                    {a.rules.map((r) => <li key={r}>{r}</li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: 40 }}>
+              <a href="/sign-in" className={`${styles.btnLg} ${styles.btnBrand}`}>See your schema map →</a>
+            </div>
+          </div>
+        </section>
+
         {/* ── How it works ──────────────────────────────────────────────── */}
         <section className={styles.section} id="how-it-works">
           <div className="container">
@@ -329,10 +388,11 @@ export default function LandingPage() {
                 <ul className={styles.pricingFeatures}>
                   {[
                     ['✓', 'Everything in CLI'],
-                    ['✓', 'Web dashboard'],
-                    ['✓', 'Historical scan tracking'],
-                    ['✓', 'Risk score trends over time'],
-                    ['✓', 'Issue detail panel'],
+                    ['✓', 'Interactive Schema Map'],
+                    ['✓', 'Collection Health Radar'],
+                    ['✓', 'Priority Quadrant (what to fix first)'],
+                    ['✓', 'Drift Timeline across scans'],
+                    ['✓', 'Field-level issue filtering'],
                     ['✓', 'Cancel anytime'],
                   ].map(([check, feature]) => (
                     <li key={feature}>

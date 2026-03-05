@@ -149,14 +149,16 @@ Options:
 
 ## Dashboard
 
-The CLI is free forever. The [dashboard](https://lintbase.com) adds:
+The CLI is free forever. The [dashboard](https://lintbase.com) visualizes your scan results as an **interactive schema map** — your credentials never leave your machine.
 
-- **Trend analysis** — is your risk score improving or getting worse over time?
-- **90-day history** — compare any two scans side by side
-- **Issue detail** — click any issue for full context, affected documents, and fix suggestion
-- **Team visibility** — share scan results without giving DB access
+**What you get after running `--save`:**
 
-**Free:** 7 scans · **Pro:** $39/month for unlimited history, exports, and alerts
+- **⬡ Schema Map** — every collection as a draggable card, with real field names, types, presence rates, and issue badges
+- **◎ Health Radar** — per-collection spider chart across Schema, Security, Performance, and Cost axes
+- **⊕ Priority Quadrant** — 2×2 bubble chart of Impact vs. Ease of Fix — tells you what to fix first
+- **≋ Drift Timeline** — click any past scan to replay its schema state and compare
+
+**Free:** 7 scans · **Pro:** $39/month — unlimited history, all visual features
 
 ---
 
