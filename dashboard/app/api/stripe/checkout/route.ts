@@ -6,11 +6,14 @@ import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '../../../../lib/firebase-admin';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2026-02-25.clover',
-});
+// Force dynamic — Stripe requires runtime env vars, cannot be statically rendered
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
+    // Lazy-init Stripe inside the handler so build-time static analysis doesn't crash
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+        apiVersion: '2026-02-25.clover',
+    });
     try {
         const { userId, email } = await req.json() as { userId: string; email: string };
 
