@@ -18,6 +18,8 @@ import {
     printError,
 } from './reporters/terminal.reporter.js';
 
+import { writeMarkdownReport } from './reporters/markdown.reporter.js';
+
 import { LintBaseDocument, LintBaseIssue, LintBaseReport, LintBaseScanResult, CollectionSchema, FieldSchema } from './types/index.js';
 
 // ── Supported connectors ────────────────────────────────────────────────────
@@ -73,6 +75,8 @@ interface ScanOptions {
     collection: string[];  // repeatable: --collection Users --collection Baux
     save?: string;         // --save https://www.lintbase.com  → POST report to /api/scans
     token?: string;        // --token <api-key>            → Authorization: Bearer header
+    format?: string;       // --format md  → write Markdown output
+    out?: string;          // --out ./docs/schema  → output directory for --format md
 }
 
 // ── Repeatable option collector ─────────────────────────────────────────────
@@ -99,6 +103,8 @@ program
     .option('--collection <name>', 'Only scan this collection (repeatable)', collect, [] as string[])
     .option('--save <url>', 'Push scan results to a LintBase dashboard (e.g. --save https://www.lintbase.com)')
     .option('--token <apiKey>', 'API key for --save authentication (from your dashboard settings)')
+    .option('--format <fmt>', 'Output format: md  (writes per-collection Markdown files — perfect for Obsidian or AI context)')
+    .option('--out <dir>', 'Output directory for --format md', '.lintbase/schema')
     .action(async (database: string, options: ScanOptions) => {
         const jsonMode = options.json;
 
@@ -283,6 +289,24 @@ program
                 process.stdout.write(JSON.stringify(report, null, 2) + '\n');
             } else {
                 printIssues(report);
+            }
+
+            // ── Markdown export (--format md) ──────────────────────────────────
+            if (options.format?.toLowerCase() === 'md') {
+                const outDir = options.out ?? '.lintbase/schema';
+                try {
+                    const written = writeMarkdownReport(report, outDir);
+                    if (!jsonMode) {
+                        console.log(
+                            '\n' +
+                            chalk.green(`  ✔  Markdown schema written`) +
+                            chalk.dim(` · ${written.length} file(s) → ${outDir}`)
+                        );
+                        console.log(chalk.dim('     Open in Obsidian or drop into your repo as a "database wiki".'));
+                    }
+                } catch (err) {
+                    console.error(chalk.red(`  ✖  Failed to write Markdown: ${err instanceof Error ? err.message : String(err)}`));
+                }
             }
 
             // Step 7 — push to dashboard with --save
