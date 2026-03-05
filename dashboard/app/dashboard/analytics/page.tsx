@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../lib/auth';
-import { getRecentScans, riskLevel, formatDate, type StoredScan } from '../../../lib/db';
+import { getRecentScans, getLatestScanDetail, riskLevel, formatDate, type StoredScan, type StoredScanDetail } from '../../../lib/db';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
     ResponsiveContainer, ReferenceLine,
@@ -34,13 +34,18 @@ export default function AnalyticsPage() {
     const { user, plan } = useAuth();
     const router = useRouter();
     const [scans, setScans] = useState<StoredScan[]>([]);
+    const [detail, setDetail] = useState<StoredScanDetail | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!user) return;
-        getRecentScans(user.uid, plan === 'pro' ? 90 : 7)
-            .then(setScans)
-            .finally(() => setLoading(false));
+        Promise.all([
+            getRecentScans(user.uid, plan === 'pro' ? 90 : 7),
+            getLatestScanDetail(user.uid),
+        ]).then(([s, d]) => {
+            setScans(s);
+            setDetail(d);
+        }).finally(() => setLoading(false));
     }, [user, plan]);
 
     // ── Free gate ────────────────────────────────────────────────────────
@@ -65,15 +70,28 @@ export default function AnalyticsPage() {
         );
     }
 
-    // ── Chart data ───────────────────────────────────────────────────────
+    // ── Chart data (X axis = scan index, avoids duplicate-date problem) ─────
     const chartData = [...scans].reverse().map((s, i) => ({
         i: i + 1,
-        date: formatDate(s.scannedAt).split(',')[0],
+        date: formatDate(s.scannedAt),          // shown in tooltip, not axis
         score: s.summary.riskScore,
         errors: s.summary.errors,
         warnings: s.summary.warnings,
         label: riskLevel(s.summary.riskScore),
     }));
+
+    // ── Per-collection breakdown from latest scan ─────────────────────────
+    type ColRow = { name: string; errors: number; warnings: number; infos: number; total: number };
+    const colBreakdown: ColRow[] = (() => {
+        if (!detail) return [];
+        const map: Record<string, ColRow> = {};
+        for (const issue of detail.issues ?? []) {
+            if (!map[issue.collection]) map[issue.collection] = { name: issue.collection, errors: 0, warnings: 0, infos: 0, total: 0 };
+            map[issue.collection][issue.severity === 'error' ? 'errors' : issue.severity === 'warning' ? 'warnings' : 'infos']++;
+            map[issue.collection].total++;
+        }
+        return Object.values(map).sort((a, b) => b.errors * 3 + b.warnings - (a.errors * 3 + a.warnings));
+    })();
 
     const t = trend(scans);
     const latest = scans[0];
@@ -150,15 +168,17 @@ export default function AnalyticsPage() {
                     <div className={styles.chartCard}>
                         <div className={styles.chartHeader}>
                             <h3 className={styles.chartTitle}>Risk Score Over Time</h3>
-                            <span className={styles.chartSub}>Lower is better</span>
+                            <span className={styles.chartSub}>Scan # on X axis · hover for date · lower is better</span>
                         </div>
                         <ResponsiveContainer width="100%" height={260}>
                             <LineChart data={chartData} margin={{ top: 8, right: 24, left: -16, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="var(--n-border)" />
-                                <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'var(--n-text-3)' }} tickLine={false} />
+                                <XAxis dataKey="i" tick={{ fontSize: 11, fill: 'var(--n-text-3)' }} tickLine={false}
+                                    label={{ value: 'Scan #', position: 'insideBottomRight', offset: -4, fontSize: 10, fill: 'var(--n-text-3)' }} />
                                 <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: 'var(--n-text-3)' }} tickLine={false} axisLine={false} />
                                 <Tooltip
                                     contentStyle={{ background: 'var(--n-bg)', border: '1px solid var(--n-border)', borderRadius: '6px', fontSize: 12 }}
+                                    labelFormatter={(i) => `Scan #${i} · ${chartData[Number(i) - 1]?.date ?? ''}`}
                                     formatter={(v) => [`${v ?? 0} — ${riskLevel(Number(v ?? 0))}`, 'Risk Score'] as [string, string]}
                                 />
                                 <ReferenceLine y={75} stroke="#EF4444" strokeDasharray="4 4" label={{ value: 'CRITICAL', fontSize: 10, fill: '#EF4444' }} />
@@ -175,25 +195,29 @@ export default function AnalyticsPage() {
                         </ResponsiveContainer>
                     </div>
 
-                    {/* ── Errors chart ─────────────────────────────────────── */}
-                    <div className={styles.chartCard}>
-                        <div className={styles.chartHeader}>
-                            <h3 className={styles.chartTitle}>Errors Per Scan</h3>
-                            <span className={styles.chartSub}>Trend toward zero</span>
+                    {/* ── Per-collection breakdown ─────────────────────────── */}
+                    {colBreakdown.length > 0 && (
+                        <div className={styles.chartCard}>
+                            <div className={styles.chartHeader}>
+                                <h3 className={styles.chartTitle}>Collection Risk Breakdown</h3>
+                                <span className={styles.chartSub}>Latest scan — sorted by severity</span>
+                            </div>
+                            <div className={styles.scanTable}>
+                                <div className={`${styles.scanRow} ${styles.scanRowHeader}`}>
+                                    <span>Collection</span><span>Errors</span><span>Warnings</span><span>Infos</span><span>Total</span>
+                                </div>
+                                {colBreakdown.map(col => (
+                                    <div key={col.name} className={styles.scanRow}>
+                                        <span style={{ fontWeight: 500 }}>{col.name}</span>
+                                        <span style={{ color: col.errors > 0 ? '#EF4444' : 'var(--n-text-3)', fontWeight: col.errors > 0 ? 600 : 400 }}>{col.errors || '—'}</span>
+                                        <span style={{ color: col.warnings > 0 ? '#F97316' : 'var(--n-text-3)' }}>{col.warnings || '—'}</span>
+                                        <span style={{ color: col.infos > 0 ? '#0366d6' : 'var(--n-text-3)' }}>{col.infos || '—'}</span>
+                                        <span style={{ fontWeight: 600 }}>{col.total}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <ResponsiveContainer width="100%" height={180}>
-                            <LineChart data={chartData} margin={{ top: 8, right: 24, left: -16, bottom: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="var(--n-border)" />
-                                <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'var(--n-text-3)' }} tickLine={false} />
-                                <YAxis tick={{ fontSize: 11, fill: 'var(--n-text-3)' }} tickLine={false} axisLine={false} />
-                                <Tooltip
-                                    contentStyle={{ background: 'var(--n-bg)', border: '1px solid var(--n-border)', borderRadius: '6px', fontSize: 12 }}
-                                    formatter={(v) => [v ?? 0, 'Errors'] as [number, string]}
-                                />
-                                <Line type="monotone" dataKey="errors" stroke="#EF4444" strokeWidth={2} dot={{ r: 3, fill: '#EF4444', strokeWidth: 0 }} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
+                    )}
 
                     {/* ── Scan table ───────────────────────────────────────── */}
                     <div className={styles.chartCard}>

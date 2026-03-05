@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
             summary: Record<string, unknown>;
             issues: unknown[];
             scannedAt: string;
+            schema?: unknown[];
         };
 
         if (!body.summary || !body.issues || !body.scannedAt) {
@@ -53,7 +54,7 @@ export async function POST(req: NextRequest) {
             .collection('scans')
             .doc();
 
-        const scanData = {
+        const scanData: Record<string, unknown> = {
             connector: 'firestore',
             summary: body.summary,
             issues: body.issues,
@@ -62,7 +63,28 @@ export async function POST(req: NextRequest) {
             createdAt: new Date(),
         };
 
-        await scanRef.set(scanData);
+        // Store schema if provided (from CLI v0.1.2+)
+        // Cap at 30 fields per collection to stay within Firestore's 1MB doc limit
+        if (body.schema && Array.isArray(body.schema)) {
+            // Cap at 30 fields per collection to stay within Firestore's 1MB doc limit
+            scanData.schema = body.schema.map((col) => {
+                const c = col as { name: string; sampledDocuments: number; fields: unknown[] };
+                return {
+                    name: c.name,
+                    sampledDocuments: c.sampledDocuments,
+                    fields: Array.isArray(c.fields) ? c.fields.slice(0, 30) : [],
+                };
+            });
+        }
+
+        try {
+            await scanRef.set(scanData);
+        } catch (writeErr) {
+            // If write fails (e.g. doc too large), retry without schema
+            console.error('[POST /api/scans] write failed, retrying without schema:', writeErr);
+            delete scanData.schema;
+            await scanRef.set(scanData);
+        }
 
         return NextResponse.json(
             { success: true, scanId: scanRef.id, message: 'Scan saved to your LintBase dashboard.' },

@@ -18,7 +18,7 @@ import {
     printError,
 } from './reporters/terminal.reporter.js';
 
-import { LintBaseDocument, LintBaseIssue, LintBaseReport, LintBaseScanResult } from './types/index.js';
+import { LintBaseDocument, LintBaseIssue, LintBaseReport, LintBaseScanResult, CollectionSchema, FieldSchema } from './types/index.js';
 
 // ── Supported connectors ────────────────────────────────────────────────────
 const SUPPORTED_CONNECTORS: Record<string, boolean> = {
@@ -28,6 +28,40 @@ const SUPPORTED_CONNECTORS: Record<string, boolean> = {
 // ── Risk score formula ──────────────────────────────────────────────────────
 function computeRiskScore(errors: number, warnings: number, infos: number): number {
     return Math.min(100, errors * 12 + warnings * 4 + infos * 1);
+}
+
+// ── Schema derivation ────────────────────────────────────────────────────────
+function deriveSchema(documents: LintBaseDocument[], collections: string[]): CollectionSchema[] {
+    return collections.map((col) => {
+        const docs = documents.filter((d) => d.collection === col);
+        const total = docs.length;
+        const fieldTypes = new Map<string, Set<string>>();
+        const fieldCounts = new Map<string, number>();
+
+        for (const doc of docs) {
+            for (const [field, { type }] of Object.entries(doc.fields)) {
+                if (!fieldTypes.has(field)) fieldTypes.set(field, new Set());
+                fieldTypes.get(field)!.add(type);
+                fieldCounts.set(field, (fieldCounts.get(field) ?? 0) + 1);
+            }
+        }
+
+        const fields: FieldSchema[] = [];
+        for (const [name, types] of fieldTypes.entries()) {
+            const count = fieldCounts.get(name) ?? 0;
+            const presenceRate = total > 0 ? count / total : 0;
+            const typeList = [...types];
+            const stable = presenceRate >= 0.8 && typeList.length === 1;
+            let note: string | undefined;
+            if (typeList.length > 1) note = `Type mismatch: ${typeList.join(' | ')}`;
+            else if (presenceRate < 0.6) note = `Sparse: ${Math.round(presenceRate * 100)}% presence`;
+            else if (presenceRate < 0.8) note = `Optional: ${Math.round(presenceRate * 100)}% presence`;
+            fields.push({ name, types: typeList, presenceRate, stable, note });
+        }
+
+        fields.sort((a, b) => (a.stable !== b.stable ? (a.stable ? -1 : 1) : b.presenceRate - a.presenceRate));
+        return { name: col, sampledDocuments: total, fields };
+    });
 }
 
 // ── CLI option types ────────────────────────────────────────────────────────
@@ -241,6 +275,7 @@ program
                 },
                 issues,
                 scannedAt: scanResult.scannedAt,
+                schema: deriveSchema(scanResult.documents, scanResult.collections),
             };
 
             if (jsonMode) {

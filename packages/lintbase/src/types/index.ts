@@ -27,6 +27,20 @@ export interface LintBaseIssue {
     suggestion?: string;
 }
 
+export interface FieldSchema {
+    name: string;
+    types: string[];
+    presenceRate: number; // 0–1
+    stable: boolean;
+    note?: string;
+}
+
+export interface CollectionSchema {
+    name: string;
+    sampledDocuments: number;
+    fields: FieldSchema[];
+}
+
 export interface LintBaseReport {
     summary: {
         totalCollections: number;
@@ -38,4 +52,6 @@ export interface LintBaseReport {
     };
     issues: LintBaseIssue[];
     scannedAt: Date;
+    /** Real field-level schema derived from sampled documents */
+    schema?: CollectionSchema[];
 }
