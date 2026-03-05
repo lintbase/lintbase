@@ -42,6 +42,27 @@ lintbase_get_schema({
 })
 ```
 
+**Optional: persist schema to disk as Markdown** (great for Obsidian, team docs, or permanent AI context):
+
+```
+lintbase_get_schema({
+  keyPath: "./service-account.json",
+  format: "md",
+  outPath: "./.lintbase/schema"        // directory — one .md file per collection + README.md index
+})
+
+// Or for a single collection:
+lintbase_get_schema({
+  keyPath: "./service-account.json",
+  collection: "users",
+  format: "md",
+  outPath: "./docs/schema/users.md"    // full file path
+})
+```
+
+The output is Obsidian-compatible (YAML frontmatter, callouts, wikilinks between collections).
+Commit `.lintbase/schema/` to your repo to give every team member and AI agent instant schema context.
+
 **Read the output carefully:**
 - ✅ Fields with `100%` presence and a single type are stable — safe to use
 - ⚠️ Fields with `<80%` presence should be treated as **optional** — always use null checks
