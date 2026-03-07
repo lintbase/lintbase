@@ -32,13 +32,13 @@ export default function LandingPage() {
             </div>
 
             <h1 className={styles.heroTitle}>
-              ESLint for<br />
-              <em>your database.</em>
+              Stop AI from writing<br />
+              <em>invalid database code.</em>
             </h1>
 
             <p className={styles.heroSub}>
-              Catch schema drift, performance issues, security vulnerabilities, and cost leaks
-              in your NoSQL database — before they become expensive problems.
+              LintBase scans your NoSQL database to detect schema drift, security risks,
+              performance issues, and runaway costs — before they break production.
             </p>
 
             <div className={styles.heroActions}>
@@ -134,6 +134,51 @@ export default function LandingPage() {
                 </span>
               </div>
             </div>
+
+            <div style={{ textAlign: 'center', marginTop: 16 }}>
+              <a href="https://github.com/lintbase/lintbase" target="_blank" rel="noreferrer" style={{ color: '#9CA3AF', textDecoration: 'none', fontSize: 14 }}>
+                ⭐ Star us on GitHub
+              </a>
+            </div>
+
+            {/* AI Agent Context Terminal */}
+            <div className={styles.terminal} style={{ marginTop: 40, maxWidth: 640 }}>
+              <div className={styles.termBar}>
+                <div className={`${styles.termDot} ${styles.termDotRed}`} />
+                <div className={`${styles.termDot} ${styles.termDotYellow}`} />
+                <div className={`${styles.termDot} ${styles.termDotGreen}`} />
+                <span className={styles.termTitle}>AI Context Generator</span>
+              </div>
+              <div className={styles.termBody}>
+                <span className={styles.termRow}>
+                  <span className={styles.termPrompt}>$ </span>
+                  <span>npx lintbase export-context firestore</span>
+                </span>
+                <span className={styles.termRow}>&nbsp;</span>
+                <span className={styles.termRow}>
+                  <span className={styles.termOk}>✔</span>
+                  <span> Generated AI context:</span>
+                </span>
+                <span className={styles.termRow}>
+                  <span className={styles.termDim}>  ├── database-schema.md</span>
+                </span>
+                <span className={styles.termRow}>
+                  <span className={styles.termDim}>  ├── collections.md</span>
+                </span>
+                <span className={styles.termRow}>
+                  <span className={styles.termDim}>  └── security-rules.md</span>
+                </span>
+                <span className={styles.termRow}>&nbsp;</span>
+                <span className={styles.termRow}>
+                  <span className={styles.termDim}>Drop these into Cursor, Windsurf, or Copilot. Stop AI hallucinations instantly.</span>
+                </span>
+              </div>
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: 64, color: '#9CA3AF', fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: 13 }}>
+              Trusted by teams building with Firestore and MongoDB
+            </div>
+
           </div>
         </section>
 
@@ -349,8 +394,7 @@ export default function LandingPage() {
             <span className={styles.sectionTag}>Pricing</span>
             <h2 className={styles.sectionTitle}>Start free. Upgrade when it matters.</h2>
             <p className={styles.sectionSub} style={{ margin: '0 auto' }}>
-              The CLI is free and open-source forever. Pro unlocks the dashboard,
-              historical tracking, and automated alerts.
+              Teams upgrade when they need CI protection, schema history, and automated alerts.
             </p>
 
             <div className={styles.pricingGrid}>
@@ -361,11 +405,11 @@ export default function LandingPage() {
                 <div className={styles.pricingPeriod}>forever, open-source</div>
                 <ul className={styles.pricingFeatures}>
                   {[
-                    ['✓', 'All 4 analyzers (16 rules)'],
-                    ['✓', 'Firestore connector'],
-                    ['✓', 'Beautiful terminal output'],
+                    ['✓', 'All analyzers & export tools'],
+                    ['✓', 'Firestore & MongoDB'],
+                    ['✓', 'Export AI Context'],
+                    ['✓', 'Local CI Schema Snapshots'],
                     ['✓', '--json flag for CI/CD'],
-                    ['✓', '--ignore & --collection flags'],
                     ['✓', 'MIT license'],
                   ].map(([check, feature]) => (
                     <li key={feature}>
@@ -385,15 +429,21 @@ export default function LandingPage() {
                 <div className={styles.pricingTier}>Pro — SaaS</div>
                 <div className={styles.pricingAmount}><sup>$</sup>39</div>
                 <div className={styles.pricingPeriod}>per month · cancel anytime</div>
+
+                <div style={{ fontSize: 14, color: '#A78BFA', fontWeight: 500, marginTop: 16, marginBottom: 8 }}>
+                  Break your CI pipeline when schema drift is detected.
+                </div>
+
                 <ul className={styles.pricingFeatures}>
                   {[
-                    ['✓', 'Everything in CLI'],
+                    ['✓', 'CI Schema Protection (NEW)'],
+                    ['✓', 'Cloud Schema Snapshots'],
+                    ['✓', 'Scan history & comparisons'],
+                    ['✓', 'Slack / alert integrations'],
                     ['✓', 'Interactive Schema Map'],
                     ['✓', 'Collection Health Radar'],
-                    ['✓', 'Priority Quadrant (what to fix first)'],
+                    ['✓', 'Priority Quadrant'],
                     ['✓', 'Drift Timeline across scans'],
-                    ['✓', 'Field-level issue filtering'],
-                    ['✓', 'Cancel anytime'],
                   ].map(([check, feature]) => (
                     <li key={feature}>
                       <span className={styles.featureCheck}>{check}</span>

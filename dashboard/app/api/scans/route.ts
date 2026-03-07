@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
             issues: unknown[];
             scannedAt: string;
             schema?: unknown[];
+            connector?: string;
         };
 
         if (!body.summary || !body.issues || !body.scannedAt) {
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
             .doc();
 
         const scanData: Record<string, unknown> = {
-            connector: 'firestore',
+            connector: body.connector || 'firestore',
             summary: body.summary,
             issues: body.issues,
             issueCount: body.issues.length,

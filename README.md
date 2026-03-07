@@ -1,9 +1,10 @@
 # LintBase
 
-> **ESLint for your Firestore database** — catch security vulnerabilities, cost leaks, schema drift, and performance issues before they become expensive production problems.
+> **Ground Truth for AI Coding Agents.**
+> LintBase gives AI agents real-time knowledge of your database schema, security rules, and architecture so they stop hallucinating your codebase.
 
 ```bash
-npx lintbase scan firestore --key ./service-account.json
+npx lintbase export-context firestore --key ./service-account.json
 ```
 
 [![npm version](https://img.shields.io/npm/v/lintbase.svg)](https://www.npmjs.com/package/lintbase)
@@ -14,14 +15,38 @@ npx lintbase scan firestore --key ./service-account.json
 
 ## Why LintBase?
 
-Your code has ESLint. Your Firestore doesn't have anything.
+Developers are constantly feeding context files to AI tools like Cursor, Windsurf, Copilot Workspace, and Claude Code.
+If your agent doesn't understand your *real* database schema, it writes code that fails in production.
 
-LintBase scans your database and surfaces issues that are invisible until they show up as an outage or a surprise bill:
+LintBase acts as the bridge. It connects directly to your database, reads the **ground truth** of your live documents, and generates structured context optimized for AI.
 
-- 🔒 **Security** — documents with no auth rules, exposed PII, unvalidated writes
-- 💸 **Cost** — unbounded queries, missing indexes, collections that cost $200/mo for nothing  
-- 📐 **Schema drift** — fields that changed types, missing required fields, inconsistent structure
-- ⚡ **Performance** — deeply nested data, missing pagination, hot document patterns
+- 🤖 **Stops AI Hallucinations** — Generates exact schema, field presence rates, and types.
+- 📐 **Catches Schema Drift** — CI protection with `lintbase check` against schema snapshots.
+- 🔒 **Security Context** — Highlights missing rules or exposed PII before your AI writes queries.
+- 💸 **Cost Awareness** — Prevents AI from writing unbounded queries on 2M+ document collections.
+- 🍃 **Universal NoSQL** — Works effortlessly with Firestore and MongoDB.
+
+---
+
+## 🤖 AI Context Export (For Cursor, Claude, Windsurf)
+
+The fastest way to give your AI agent perfect database knowledge.
+
+```bash
+npx lintbase export-context firestore --key ./service-account.json
+```
+
+**Output:**
+```
+/lintbase-context/
+├── database-schema.md
+├── collections.md
+├── security-rules.md
+├── architecture.md
+└── risk-report.md
+```
+
+Drop the `lintbase-context` folder into your AI's context window, or mention it in `.cursorrules`. Your agent will now write perfect, drift-free database queries.
 
 ---
 
@@ -33,7 +58,21 @@ Firebase Console → Project Settings → Service Accounts → **Generate new pr
 
 Save the JSON file. **Never commit it to git.**
 
-### 2. Run a scan
+### 2. CI Pipeline Protection (Schema Drift)
+
+LintBase acts as "Version Control for your Schema". Run the snapshot command to create a baseline:
+
+```bash
+npx lintbase snapshot firestore --key ./service-account.json
+```
+Commit `.lintbase/schema.json` to your repository. Then, add the check command to your CI/CD pipeline (GitHub Actions, GitLab CI):
+
+```bash
+npx lintbase check firestore --key ./service-account.json --fail-on error
+```
+If a query or deployment accidentally deletes a critical field or changes a type (e.g., `string` to `number`), **your CI build will fail instantly.**
+
+### 3. Run a general scan
 
 ```bash
 npx lintbase scan firestore --key ./service-account.json
@@ -71,7 +110,13 @@ npx lintbase scan firestore \
   --token <your-api-token>
 ```
 
-Get your token at **[lintbase.com/dashboard/settings](https://www.lintbase.com/dashboard/settings)** — free to start.
+Get your token at **[lintbase.com/dashboard/settings](https://www.lintbase.com/dashboard/settings)**.
+
+---
+
+## Supported Databases
+- **Firestore**: `npx lintbase scan firestore --key ./sa.json`
+- **MongoDB**: `npx lintbase scan mongodb --uri mongodb+srv://user:pass@cluster.mongodb.net/test`
 
 ---
 
@@ -134,11 +179,19 @@ Now when you ask your AI *"add a field to users"*, it will check your **real** s
 ## Options
 
 ```bash
-lintbase scan firestore [options]
+lintbase <command> <database> [options]
+
+Commands:
+  scan <database>             Scan a database and print diagnostic report
+  export-context <database>   Export schema to markdown/JSON for AI agents
+  snapshot <database>         Generate local schema snapshot for CI comparison
+  check <database>            Run in headless CI mode (fails on schema drift)
 
 Options:
-  --key <path>      Path to Firebase service account JSON      [required]
+  --key <path>      Path to Firebase service account JSON 
+  --uri <uri>       MongoDB connection URI
   --limit <n>       Max documents to sample per collection     [default: 100]
+  --fail-on <lvl>   Fail pipeline if issues exceed severity (error, warning, info)
   --save <url>      Dashboard URL to save results
   --token <token>   API token for dashboard (from lintbase.com)
   --collections     Comma-separated list of collections to scan
@@ -151,14 +204,14 @@ Options:
 
 The CLI is free forever. The [dashboard](https://lintbase.com) visualizes your scan results as an **interactive schema map** — your credentials never leave your machine.
 
-**What you get after running `--save`:**
+**What Pro gets you via `--save`:**
 
 - **⬡ Schema Map** — every collection as a draggable card, with real field names, types, presence rates, and issue badges
 - **◎ Health Radar** — per-collection spider chart across Schema, Security, Performance, and Cost axes
 - **⊕ Priority Quadrant** — 2×2 bubble chart of Impact vs. Ease of Fix — tells you what to fix first
-- **≋ Drift Timeline** — click any past scan to replay its schema state and compare
+- **≋ Drift Timeline** — stored history across scans so you can replay your schema architecture over time.
 
-**Free:** 7 scans · **Pro:** $39/month — unlimited history, all visual features
+**CLI Local Tooling:** 100% Free · **Pro:** $39/month — unlimited history, dashboards, and shared team workflow.
 
 ---
 

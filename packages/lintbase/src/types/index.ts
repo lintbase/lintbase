@@ -52,6 +52,6 @@ export interface LintBaseReport {
     };
     issues: LintBaseIssue[];
     scannedAt: Date;
-    /** Real field-level schema derived from sampled documents */
     schema?: CollectionSchema[];
+    connector?: string;
 }
