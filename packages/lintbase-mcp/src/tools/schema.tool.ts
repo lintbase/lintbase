@@ -144,6 +144,32 @@ function writeSchemaMarkdown(
         const indexPath = path.join(absPath, 'README.md');
         fs.writeFileSync(indexPath, indexLines.join('\n'), 'utf-8');
         written.push(indexPath);
+
+        // Persistent Agent Context Log
+        const agentContextLines: string[] = [
+            '# LintBase: AI Context & Changelog',
+            '',
+            '> **Purpose:** This file acts as persistent memory across AI agent sessions. If credits run out or a new agent takes over the workspace, **read this file first** to understand the state of the project, the current objectives, and the recent changes made.',
+            '',
+            '## 1. Project Overview',
+            '<!-- Briefly describe the project architecture and main objectives here -->',
+            '',
+            '## 2. Current Strategy / Objectives',
+            '<!-- What are the main immediate goals for the agent? -->',
+            '',
+            '## 3. Where We Left Off',
+            '<!-- State what file or sub-task the previous agent was working on before stopping -->',
+            '',
+            '## 4. Changelog',
+            '<!-- Keep a running list of major architectural changes or milestones reached. Agent should append to this list. -->',
+            '- Initiated database schema sync via LintBase MCP.'
+        ];
+        const agentContextPath = path.join(absPath, 'AGENT_CHANGES.md');
+        // Do not overwrite if it already exists to preserve user agent history
+        if (!fs.existsSync(agentContextPath)) {
+            fs.writeFileSync(agentContextPath, agentContextLines.join('\n'), 'utf-8');
+            written.push(agentContextPath);
+        }
     }
     return written;
 }

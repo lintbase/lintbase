@@ -149,6 +149,27 @@ function generateArchitecture(): string {
     ].join('\n');
 }
 
+function generateAgentChangelog(): string {
+    return [
+        '# LintBase: AI Context & Changelog',
+        '',
+        '> **Purpose:** This file acts as persistent memory across AI agent sessions. If credits run out or a new agent takes over the workspace, **read this file first** to understand the state of the project, the current objectives, and the recent changes made.',
+        '',
+        '## 1. Project Overview',
+        '<!-- Briefly describe the project architecture and main objectives here -->',
+        '',
+        '## 2. Current Strategy / Objectives',
+        '<!-- What are the main immediate goals for the agent? -->',
+        '',
+        '## 3. Where We Left Off',
+        '<!-- State what file or sub-task the previous agent was working on before stopping -->',
+        '',
+        '## 4. Changelog',
+        '<!-- Keep a running list of major architectural changes or milestones reached. Agent should append to this list. -->',
+        '- Initialize AI Context via LintBase.'
+    ].join('\n');
+}
+
 export function writeContextFiles(report: LintBaseReport, outDir: string): string[] {
     const absOut = resolve(outDir);
 
@@ -162,6 +183,7 @@ export function writeContextFiles(report: LintBaseReport, outDir: string): strin
         { name: 'risk-report.md', content: generateRiskReport(report) },
         { name: 'security-rules.md', content: generateSecurityRules(report.schema ?? []) },
         { name: 'architecture.md', content: generateArchitecture() },
+        { name: 'AGENT_CHANGES.md', content: generateAgentChangelog() },
         { name: 'lintbase-context.json', content: JSON.stringify(report, null, 2) }
     ];
 
@@ -169,6 +191,10 @@ export function writeContextFiles(report: LintBaseReport, outDir: string): strin
 
     for (const file of files) {
         const filepath = join(absOut, file.name);
+        // Do not overwrite AGENT_CHANGES.md if it already exists, so agents do not lose their history
+        if (file.name === 'AGENT_CHANGES.md' && existsSync(filepath)) {
+            continue;
+        }
         writeFileSync(filepath, file.content, 'utf-8');
         written.push(filepath);
     }
