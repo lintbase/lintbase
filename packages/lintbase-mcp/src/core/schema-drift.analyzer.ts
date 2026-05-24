@@ -36,6 +36,7 @@ export function analyze(result: LintBaseScanResult, _options: AnalysisOptions): 
         const presence60 = stats.count * 0.6;
         const presence80 = stats.count * 0.8;
         for (const [field, count] of fieldCounts.entries()) {
+            if (stats.count < 5) continue; // too few docs for reliable presence stats
             if (count < presence60) {
                 issues.push({ severity: 'warning', collection: col, rule: 'schema/sparse-field', message: `Field "${field}" in "${col}" is present in only ${count}/${stats.count} documents (${Math.round((count / stats.count) * 100)}%).`, suggestion: 'Consider adding a default value or marking it as optional in your application model to prevent runtime null errors.' });
             } else if (count < presence80) {

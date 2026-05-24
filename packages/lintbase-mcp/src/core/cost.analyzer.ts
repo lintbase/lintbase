@@ -1,6 +1,21 @@
 // packages/lintbase-mcp/src/core/cost.analyzer.ts
 import { LintBaseIssue, LintBaseScanResult } from '../types.js';
-import { groupByCollection, AnalysisOptions } from './analysis.utils.js';
+import { groupByCollection, AnalysisOptions, CollectionStats } from './analysis.utils.js';
+
+function fieldNames(stats: CollectionStats): Set<string> {
+    const names = new Set<string>();
+    for (const doc of stats.docs) {
+        for (const f of Object.keys(doc.fields)) names.add(f);
+    }
+    return names;
+}
+
+function jaccard(a: Set<string>, b: Set<string>): number {
+    if (a.size === 0 && b.size === 0) return 1;
+    let intersection = 0;
+    for (const x of a) { if (b.has(x)) intersection++; }
+    return intersection / (a.size + b.size - intersection);
+}
 
 const ERROR_AVG_BYTES = 50 * 1024;
 const WARN_AVG_BYTES = 5 * 1024;
@@ -36,7 +51,8 @@ export function analyze(result: LintBaseScanResult, options: AnalysisOptions): L
             const [colB, statsB] = colList[j]!;
             if (visited.has(colB)) continue;
             const byteRatio = statsA.avgBytes > 0 ? Math.abs(statsA.avgBytes - statsB.avgBytes) / statsA.avgBytes : 1;
-            if (byteRatio <= 0.15 && statsA.maxDepth === statsB.maxDepth && statsA.avgBytes > 0) {
+            const fieldSim = jaccard(fieldNames(statsA), fieldNames(statsB));
+            if (byteRatio <= 0.15 && statsA.maxDepth === statsB.maxDepth && statsA.avgBytes > 0 && fieldSim >= 0.7) {
                 group.push(colB);
                 visited.add(colB);
             }

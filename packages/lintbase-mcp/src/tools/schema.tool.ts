@@ -298,10 +298,10 @@ async function getSchema(
         fs.readFileSync(resolvedKey, 'utf-8')
     ) as admin.ServiceAccount;
 
-    if (!admin.apps.length) {
-        admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-    }
-    const db = admin.firestore();
+    const appName = `lintbase-${Buffer.from(resolvedKey).toString('base64').slice(0, 12)}`;
+    const app = admin.apps.find(a => a?.name === appName)
+        ?? admin.initializeApp({ credential: admin.credential.cert(serviceAccount) }, appName);
+    const db = admin.firestore(app);
 
     // Determine which collections to scan
     const allCollections = (await db.listCollections()).map((c) => c.id);

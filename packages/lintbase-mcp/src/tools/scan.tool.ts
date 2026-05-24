@@ -77,11 +77,11 @@ async function runScan(
         fs.readFileSync(resolvedKey, 'utf-8')
     ) as admin.ServiceAccount;
 
-    // Avoid re-initializing Firebase if already running
-    if (!admin.apps.length) {
-        admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-    }
-    const db = admin.firestore();
+    // Use a named app keyed by key path so each project gets its own instance
+    const appName = `lintbase-${Buffer.from(resolvedKey).toString('base64').slice(0, 12)}`;
+    const app = admin.apps.find(a => a?.name === appName)
+        ?? admin.initializeApp({ credential: admin.credential.cert(serviceAccount) }, appName);
+    const db = admin.firestore(app);
 
     // Discover collections
     const allCollections = (await db.listCollections()).map((c) => c.id);
