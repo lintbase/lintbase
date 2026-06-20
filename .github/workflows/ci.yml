@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x] # Test against current and LTS node versions
+        node-version: [18.x, 20.x]
 
     steps:
     - name: Checkout repository
@@ -25,10 +25,15 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      # The root package-lock.json is generated on macOS and only contains
+      # macOS optional binaries. We delete it so npm resolves the correct
+      # Linux binary (@rollup/rollup-linux-x64-gnu) for the CI runner.
+      run: |
+        rm -f package-lock.json
+        npm install
 
-    - name: Build
-      run: npm run build
+    - name: Build lintbase CLI
+      run: npm run build --workspace=packages/lintbase
 
     - name: Run Tests
-      run: npm test
+      run: npm run test --workspace=packages/lintbase

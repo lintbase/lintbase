@@ -1,6 +1,7 @@
-// src/types/index.ts
-// Core type contract — every connector must produce these shapes.
-// Analyzers are database-agnostic because they only consume these types.
+// packages/lintbase-mcp/src/types.ts
+// Re-exports the LintBase core types.
+// The MCP package copies these (rather than importing from the CLI package)
+// so both packages can be published and versioned independently on npm.
 
 export interface LintBaseDocument {
     id: string;
@@ -11,7 +12,7 @@ export interface LintBaseDocument {
 }
 
 export interface LintBaseScanResult {
-    connector: string;        // e.g. "firestore"
+    connector: string;
     collections: string[];
     documentCount: number;
     documents: LintBaseDocument[];
@@ -34,7 +35,7 @@ export interface LintBaseReport {
         errors: number;
         warnings: number;
         infos: number;
-        riskScore: number;   // 0–100
+        riskScore: number;
     };
     issues: LintBaseIssue[];
     scannedAt: Date;

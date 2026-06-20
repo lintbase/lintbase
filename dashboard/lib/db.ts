@@ -35,6 +35,22 @@ export interface StoredScan {
     createdAt: Timestamp | Date;
 }
 
+// ── Schema types (populated by CLI v0.1.2+) ─────────────────────────────────
+
+export interface FieldSchema {
+    name: string;
+    types: string[];
+    presenceRate: number;
+    stable: boolean;
+    note?: string;
+}
+
+export interface CollectionSchema {
+    name: string;
+    sampledDocuments: number;
+    fields: FieldSchema[];
+}
+
 export interface StoredScanDetail extends StoredScan {
     issues: Array<{
         severity: 'error' | 'warning' | 'info';
@@ -44,6 +60,8 @@ export interface StoredScanDetail extends StoredScan {
         affectedDocuments?: string[];
         suggestion?: string;
     }>;
+    /** Real field-level schema stored by CLI v0.1.2+ */
+    schema?: CollectionSchema[];
 }
 
 // ── Fetch helpers ─────────────────────────────────────────────────────────────

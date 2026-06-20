@@ -1,0 +1,1121 @@
+[
+  {
+    "name": "Baux",
+    "sampledDocuments": 7,
+    "fields": [
+      {
+        "name": "bail",
+        "types": [
+          "map"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "Immeubles",
+    "sampledDocuments": 100,
+    "fields": [
+      {
+        "name": "amenities",
+        "types": [
+          "map"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "country",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "zipCode",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "city",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysDisableSendingTenantWelcomeLeaseEmail",
+        "types": [
+          "boolean"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "streetName",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysEnableAutoGenerateLateRentIssue",
+        "types": [
+          "boolean"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysLeaseRenewDays",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "province",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "countryCode",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysLateRentIssueFollowUpReminderFrequencyDays",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysSendLeaseRenewEmailNotifications",
+        "types": [
+          "boolean"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "address",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "enableDaylightSavingTime",
+        "types": [
+          "boolean"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "streetNumber",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "provinceCode",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "buildingCode",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysSendInvoiceNotificationEmailDays",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysEnableSendFollowUpReminderForLateRentIssue",
+        "types": [
+          "boolean"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysEnableRentInvoiceNotificationEmail",
+        "types": [
+          "boolean"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "timeZoneName",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysLateRentIssueDays",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "name",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "addressLocation",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "rentDaysUpcomingVacancyGap",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "buldingStackId",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.99,
+        "stable": true
+      },
+      {
+        "name": "ownerFirebaseID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.99,
+        "stable": true
+      },
+      {
+        "name": "ownerName",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.99,
+        "stable": true
+      },
+      {
+        "name": "nbApt",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.99,
+        "stable": true
+      },
+      {
+        "name": "immeubleID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.99,
+        "stable": true
+      },
+      {
+        "name": "codePostal",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.99,
+        "stable": true
+      },
+      {
+        "name": "buldingID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.01,
+        "stable": false,
+        "note": "Sparse: 1% presence"
+      },
+      {
+        "name": "buildingStackID",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 0.01,
+        "stable": false,
+        "note": "Sparse: 1% presence"
+      }
+    ]
+  },
+  {
+    "name": "Leads",
+    "sampledDocuments": 13,
+    "fields": [
+      {
+        "name": "onboarded",
+        "types": [
+          "boolean"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "buldingStack",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "uid",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "nbImmeuble",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "numero",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "realStripeID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "accountType",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "businessName",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "immbeubles",
+        "types": [
+          "array"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "email",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "formule",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "clientType",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.9230769230769231,
+        "stable": true
+      },
+      {
+        "name": "RealStripeId",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.8461538461538461,
+        "stable": true
+      },
+      {
+        "name": "stripeAccountInfo",
+        "types": [
+          "map",
+          "string"
+        ],
+        "presenceRate": 0.9230769230769231,
+        "stable": false,
+        "note": "Type mismatch: map | string"
+      },
+      {
+        "name": "buldindStackAssosId",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 0.3076923076923077,
+        "stable": false,
+        "note": "Sparse: 31% presence"
+      },
+      {
+        "name": "buildingStackListId",
+        "types": [
+          "array"
+        ],
+        "presenceRate": 0.23076923076923078,
+        "stable": false,
+        "note": "Sparse: 23% presence"
+      },
+      {
+        "name": "buildingStackUserId",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 0.23076923076923078,
+        "stable": false,
+        "note": "Sparse: 23% presence"
+      },
+      {
+        "name": "business",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.07692307692307693,
+        "stable": false,
+        "note": "Sparse: 8% presence"
+      },
+      {
+        "name": "nom",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.07692307692307693,
+        "stable": false,
+        "note": "Sparse: 8% presence"
+      },
+      {
+        "name": "prenom",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.07692307692307693,
+        "stable": false,
+        "note": "Sparse: 8% presence"
+      }
+    ]
+  },
+  {
+    "name": "Meetings",
+    "sampledDocuments": 5,
+    "fields": [
+      {
+        "name": "dateAssemblee",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "timeAssemble",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "presidentEmail",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "meetingID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "immeubleID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "presidentFirebaseID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "RoomURL",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "HostRoomUrl",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "nbQuestion",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "nbResponse",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "Membres",
+    "sampledDocuments": 53,
+    "fields": [
+      {
+        "name": "country",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "buldingStackId",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "province",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "city",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "provinceCode",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "presidentEmail",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "nbApt",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "membreID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "presidentFirebaseID",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "membreName",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "phone",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.9622641509433962,
+        "stable": true
+      },
+      {
+        "name": "email",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.8490566037735849,
+        "stable": true
+      },
+      {
+        "name": "zipCode",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.24528301886792453,
+        "stable": false,
+        "note": "Sparse: 25% presence"
+      },
+      {
+        "name": "address",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.24528301886792453,
+        "stable": false,
+        "note": "Sparse: 25% presence"
+      },
+      {
+        "name": "streetNumber",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.24528301886792453,
+        "stable": false,
+        "note": "Sparse: 25% presence"
+      },
+      {
+        "name": "buildingCode",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.24528301886792453,
+        "stable": false,
+        "note": "Sparse: 25% presence"
+      },
+      {
+        "name": "codePostal",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.24528301886792453,
+        "stable": false,
+        "note": "Sparse: 25% presence"
+      },
+      {
+        "name": "streetName",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.24528301886792453,
+        "stable": false,
+        "note": "Sparse: 25% presence"
+      },
+      {
+        "name": "name",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.24528301886792453,
+        "stable": false,
+        "note": "Sparse: 25% presence"
+      },
+      {
+        "name": "addressLocation",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.24528301886792453,
+        "stable": false,
+        "note": "Sparse: 25% presence"
+      },
+      {
+        "name": "dateAssemblee",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.03773584905660377,
+        "stable": false,
+        "note": "Sparse: 4% presence"
+      }
+    ]
+  },
+  {
+    "name": "NewLease",
+    "sampledDocuments": 1,
+    "fields": [
+      {
+        "name": "payload",
+        "types": [
+          "array"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "NewTenant",
+    "sampledDocuments": 12,
+    "fields": [
+      {
+        "name": "payload",
+        "types": [
+          "null",
+          "map"
+        ],
+        "presenceRate": 0.9166666666666666,
+        "stable": false,
+        "note": "Type mismatch: null | map"
+      }
+    ]
+  },
+  {
+    "name": "NewTicket",
+    "sampledDocuments": 1,
+    "fields": [
+      {
+        "name": "Dkxk",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "StakeHolders",
+    "sampledDocuments": 1,
+    "fields": [
+      {
+        "name": "bail",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "Users",
+    "sampledDocuments": 1,
+    "fields": []
+  },
+  {
+    "name": "bankinfo",
+    "sampledDocuments": 76,
+    "fields": [
+      {
+        "name": "institutionNumber",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.9868421052631579,
+        "stable": true
+      },
+      {
+        "name": "transitNumber",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.9868421052631579,
+        "stable": true
+      },
+      {
+        "name": "accountNumber",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.9868421052631579,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "consoleLog",
+    "sampledDocuments": 12,
+    "fields": [
+      {
+        "name": "console",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.9166666666666666,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "infoskokote",
+    "sampledDocuments": 2,
+    "fields": [
+      {
+        "name": "hostname",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "telchambre",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "teladmin",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "time",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "monthlyreport",
+    "sampledDocuments": 1,
+    "fields": [
+      {
+        "name": "hostname",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "telchambre",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "teladmin",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "time",
+        "types": [
+          "number"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "pendingrewal",
+    "sampledDocuments": 43,
+    "fields": [
+      {
+        "name": "idDocument",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "lease",
+        "types": [
+          "map"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "status",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "proprio",
+        "types": [
+          "null",
+          "map"
+        ],
+        "presenceRate": 1,
+        "stable": false,
+        "note": "Type mismatch: null | map"
+      }
+    ]
+  },
+  {
+    "name": "releve",
+    "sampledDocuments": 7,
+    "fields": [
+      {
+        "name": "kohl",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.14285714285714285,
+        "stable": false,
+        "note": "Sparse: 14% presence"
+      },
+      {
+        "name": "mom;",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.14285714285714285,
+        "stable": false,
+        "note": "Sparse: 14% presence"
+      },
+      {
+        "name": "kjk",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.14285714285714285,
+        "stable": false,
+        "note": "Sparse: 14% presence"
+      },
+      {
+        "name": "mlml",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.14285714285714285,
+        "stable": false,
+        "note": "Sparse: 14% presence"
+      },
+      {
+        "name": "knljkn",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.14285714285714285,
+        "stable": false,
+        "note": "Sparse: 14% presence"
+      },
+      {
+        "name": "ski",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.14285714285714285,
+        "stable": false,
+        "note": "Sparse: 14% presence"
+      }
+    ]
+  },
+  {
+    "name": "request",
+    "sampledDocuments": 3,
+    "fields": [
+      {
+        "name": "request",
+        "types": [
+          "map"
+        ],
+        "presenceRate": 0.6666666666666666,
+        "stable": false,
+        "note": "Optional: 67% presence"
+      }
+    ]
+  },
+  {
+    "name": "requestGet",
+    "sampledDocuments": 10,
+    "fields": [
+      {
+        "name": "request",
+        "types": [
+          "map"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "requestPost",
+    "sampledDocuments": 10,
+    "fields": [
+      {
+        "name": "request",
+        "types": [
+          "map"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "stake",
+    "sampledDocuments": 1,
+    "fields": [
+      {
+        "name": "owners",
+        "types": [
+          "array"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  },
+  {
+    "name": "supportForm",
+    "sampledDocuments": 6,
+    "fields": [
+      {
+        "name": "phone",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "name",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      },
+      {
+        "name": "message",
+        "types": [
+          "string"
+        ],
+        "presenceRate": 0.16666666666666666,
+        "stable": false,
+        "note": "Sparse: 17% presence"
+      }
+    ]
+  },
+  {
+    "name": "surveySatisfaction",
+    "sampledDocuments": 1,
+    "fields": []
+  },
+  {
+    "name": "testPayload",
+    "sampledDocuments": 11,
+    "fields": [
+      {
+        "name": "payload",
+        "types": [
+          "map"
+        ],
+        "presenceRate": 1,
+        "stable": true
+      }
+    ]
+  }
+]

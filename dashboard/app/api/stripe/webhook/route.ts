@@ -10,13 +10,14 @@ import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '../../../../lib/firebase-admin';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2026-02-25.clover',
-});
-
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: NextRequest) {
+    // Lazy init — env vars are only available at runtime, not build time
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+        apiVersion: '2026-02-25.clover',
+    });
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+
     const body = await req.text();
     const signature = req.headers.get('stripe-signature');
 
