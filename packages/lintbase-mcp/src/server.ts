@@ -38,10 +38,14 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { registerScanTool } from './tools/scan.tool.js';
 import { registerSchemaTool } from './tools/schema.tool.js';
 import { registerIssuesTool } from './tools/issues.tool.js';
+import { createRequire } from 'node:module';
+
+const nodeRequire = createRequire(__filename);
+const { version } = nodeRequire('../package.json') as { version: string };
 
 const server = new McpServer({
     name: 'lintbase-mcp',
-    version: '0.1.6',
+    version,
 });
 
 // ── Register all 3 tools ──────────────────────────────────────────────────────
@@ -53,7 +57,7 @@ registerIssuesTool(server);   // Filtered issues → targeted queries
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error('LintBase MCP server v0.1.6 running on stdio');
+    console.error(`LintBase MCP server v${version} running on stdio`);
 }
 
 main().catch((err) => {
