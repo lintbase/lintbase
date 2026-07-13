@@ -26,6 +26,16 @@ LintBase acts as the bridge. It connects directly to your database, reads the **
 - 💸 **Cost Awareness** — Prevents AI from writing unbounded queries on 2M+ document collections.
 - 🍃 **Universal NoSQL** — Works effortlessly with Firestore and MongoDB.
 
+### Why not just let the agent read the code?
+
+Because in document databases, the code lies. The real schema is whatever your live documents actually contain, and that drifts away from the code with every half-finished migration, every renamed field, and every previous AI session that wrote in a hurry. An agent inferring the schema from TypeScript interfaces writes plausible queries against a database that no longer exists. The failure is silent: empty results, undefined values, a new field variant living alongside the old one. LintBase reads the documents, not the code.
+
+### Limitations (honest ones)
+
+- Firestore and MongoDB only. Postgres is the obvious gap and it is next.
+- Large collections are sampled, not fully scanned. Presence rates are estimates on multi-million-document collections.
+- The MCP server is newer than the CLI. Expect rough edges there first.
+
 ---
 
 ## 🤖 AI Context Export (For Cursor, Claude, Windsurf)
