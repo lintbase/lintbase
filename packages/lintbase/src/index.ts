@@ -75,6 +75,7 @@ interface ScanOptions {
     key?: string;
     uri?: string;
     limit: string;
+    maxDepth?: string;     // Firestore only: how many collection tiers deep to recurse (default 2)
     json: boolean;
     failOn?: string;
     ignore: string[];      // repeatable: --ignore schema/sparse-field --ignore cost/redundant-collections
@@ -105,6 +106,7 @@ program
     .option('--key <path>', 'Path to the Service Account JSON file (required for Firestore)')
     .option('--uri <uri>', 'MongoDB connection string (required for MongoDB)')
     .option('--limit <number>', 'Max documents to sample per collection', '100')
+    .option('--max-depth <number>', 'Firestore: how many collection tiers deep to recurse into subcollections (1 = top-level only)', '2')
     .option('--json', 'Output the report as JSON (stdout only — great for CI/CD pipes)')
     .option('--ignore <rule>', 'Ignore a specific rule (repeatable)', collect, [] as string[])
     .option('--collection <name>', 'Only scan this collection (repeatable)', collect, [] as string[])
@@ -123,6 +125,7 @@ program
     .option('--key <path>', 'Path to the Service Account JSON file (required for Firestore)')
     .option('--uri <uri>', 'MongoDB connection string (required for MongoDB)')
     .option('--limit <number>', 'Max documents to sample per collection', '100')
+    .option('--max-depth <number>', 'Firestore: how many collection tiers deep to recurse into subcollections (1 = top-level only)', '2')
     .option('--collection <name>', 'Only scan this collection (repeatable)', collect, [] as string[])
     .option('--out <dir>', 'Output directory for context files (default: lintbase-context)')
     .action(async (database: string, options: any) => {
@@ -131,6 +134,7 @@ program
             key: options.key,
             uri: options.uri,
             limit: options.limit,
+            maxDepth: options.maxDepth,
             json: true, // We use JSON mode to suppress standard terminal tables and banners
             ignore: [],
             collection: options.collection,
@@ -159,12 +163,14 @@ program
     .option('--key <path>', 'Path to the Service Account JSON file (required for Firestore)')
     .option('--uri <uri>', 'MongoDB connection string (required for MongoDB)')
     .option('--limit <number>', 'Max documents to sample per collection', '100')
+    .option('--max-depth <number>', 'Firestore: how many collection tiers deep to recurse into subcollections (1 = top-level only)', '2')
     .option('--collection <name>', 'Only scan this collection (repeatable)', collect, [] as string[])
     .action(async (database: string, options: any) => {
         const scanOpts: ScanOptions = {
             key: options.key,
             uri: options.uri,
             limit: options.limit,
+            maxDepth: options.maxDepth,
             json: true,
             ignore: [],
             collection: options.collection,
@@ -194,6 +200,7 @@ program
     .option('--key <path>', 'Path to the Service Account JSON file (required for Firestore)')
     .option('--uri <uri>', 'MongoDB connection string (required for MongoDB)')
     .option('--limit <number>', 'Max documents to sample per collection', '100')
+    .option('--max-depth <number>', 'Firestore: how many collection tiers deep to recurse into subcollections (1 = top-level only)', '2')
     .option('--fail-on <severity>', 'Fail pipeline only on specific severity level (error, warning, info)', 'error')
     .option('--ignore <rule>', 'Ignore a specific rule (repeatable)', collect, [] as string[])
     .option('--collection <name>', 'Only scan this collection (repeatable)', collect, [] as string[])
@@ -249,6 +256,15 @@ async function performScan(database: string, options: ScanOptions, quietJSON: bo
         printError(
             `Invalid --limit value: "${options.limit}"`,
             'Must be a positive integer (e.g. --limit 50)'
+        );
+        process.exit(1);
+    }
+
+    const maxDepth = parseInt(options.maxDepth ?? '2', 10);
+    if (isNaN(maxDepth) || maxDepth < 1) {
+        printError(
+            `Invalid --max-depth value: "${options.maxDepth}"`,
+            'Must be a positive integer (1 = top-level collections only)'
         );
         process.exit(1);
     }
@@ -354,20 +370,41 @@ async function performScan(database: string, options: ScanOptions, quietJSON: bo
     //   b) we can apply the --collection filter before sampling
     const sampleSpinner = ora({ text: chalk.dim(`Sampling up to ${limit} docs per collection…`), color: 'magenta' }).start();
     let scanResult: LintBaseScanResult;
+    let treeTruncated = false;
     try {
         const allDocuments: LintBaseDocument[] = [];
-        for (const col of collections) {
-            const docs = await connector.sampleDocuments(col, limit);
-            allDocuments.push(...docs);
+        // Firestore stores subcollections beneath documents, so a flat pass over
+        // top-level collections misses them. When the connector supports a
+        // recursive tree walk, use it to sample every tier down to --max-depth.
+        let sampledCollections = collections;
+        if (connector instanceof FirestoreConnector && maxDepth > 1) {
+            const tree = await connector.sampleCollectionTree(collections, limit, maxDepth);
+            sampledCollections = tree.collections;
+            allDocuments.push(...tree.documents);
+            treeTruncated = tree.truncated;
+        } else {
+            for (const col of collections) {
+                const docs = await connector.sampleDocuments(col, limit);
+                allDocuments.push(...docs);
+            }
         }
         scanResult = {
-            connector: 'firestore',
-            collections,
+            connector: connector.name,
+            collections: sampledCollections,
             documentCount: allDocuments.length,
             documents: allDocuments,
             scannedAt: new Date(),
         };
-        sampleSpinner.succeed(chalk.green(`Sampled ${scanResult.documentCount} document(s)`));
+        sampleSpinner.succeed(
+            chalk.green(`Sampled ${scanResult.documentCount} document(s)`) +
+            chalk.dim(` · ${sampledCollections.length} collection(s) incl. subcollections`)
+        );
+        if (treeTruncated && !jsonMode) {
+            console.log(chalk.yellow(
+                `  ⚠  Stopped after 500 collections to protect read costs — deep scan may be incomplete. ` +
+                `Narrow with --collection or lower --max-depth.`
+            ));
+        }
     } catch (err) {
         sampleSpinner.fail(chalk.red('Failed to sample documents'));
         printError(err instanceof Error ? err.message : String(err));

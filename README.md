@@ -201,6 +201,8 @@ Options:
   --key <path>      Path to Firebase service account JSON 
   --uri <uri>       MongoDB connection URI
   --limit <n>       Max documents to sample per collection     [default: 100]
+  --max-depth <n>   Firestore: tiers to recurse into subcollections
+                    (1 = top-level only)                       [default: 2]
   --fail-on <lvl>   Fail pipeline if issues exceed severity (error, warning, info)
   --save <url>      Dashboard URL to save results
   --token <token>   API token for dashboard (from lintbase.com)
