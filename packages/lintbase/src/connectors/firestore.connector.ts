@@ -11,6 +11,13 @@ export class FirestoreConnector extends BaseConnector {
     private db!: admin.firestore.Firestore;
     private keyPath: string;
 
+    /**
+     * Safety ceiling on how many distinct collection paths a single scan may
+     * sample. Subcollections are discovered per-document, so a wide or deeply
+     * nested tree could otherwise fan out into a very large number of reads.
+     */
+    private static readonly MAX_COLLECTION_PATHS = 500;
+
     constructor(keyPath: string) {
         super();
         this.keyPath = path.resolve(keyPath);
@@ -54,18 +61,109 @@ export class FirestoreConnector extends BaseConnector {
         return collections.map((c) => c.id);
     }
 
+    /**
+     * List the subcollection ids directly beneath a single document. Firestore
+     * only exposes subcollections per-document (there is no database-wide list),
+     * so this must be called on each document we want to drill into.
+     *
+     * @param documentPath A concrete document path, e.g. "users/abc123".
+     */
+    async getSubcollections(documentPath: string): Promise<string[]> {
+        const subcollections = await this.db.doc(documentPath).listCollections();
+        return subcollections.map((c) => c.id);
+    }
+
     // ── sampleDocuments ────────────────────────────────────────────────────────
 
     async sampleDocuments(
         collection: string,
         limit: number
     ): Promise<LintBaseDocument[]> {
+        return this.sampleDocumentsAtPath(collection, collection, limit);
+    }
+
+    /**
+     * Recursively walk the collection tree from `rootCollections`, sampling
+     * documents at every tier down to `maxDepth`.
+     *
+     *   maxDepth = 1 -> root collections only (the pre-recursion behavior)
+     *   maxDepth = 2 -> root + one tier of subcollections (default)
+     *
+     * The same subcollection under different parents is aggregated under one
+     * canonical id where each ancestor document id is replaced with a wildcard
+     * segment. Documents from "users/abc/orders" and "users/def/orders" are both
+     * labeled "users/[wildcard]/orders", so schema analysis sees them as one
+     * collection.
+     */
+    async sampleCollectionTree(
+        rootCollections: string[],
+        limit: number,
+        maxDepth: number
+    ): Promise<{ collections: string[]; documents: LintBaseDocument[]; truncated: boolean }> {
+        const collectionsSeen = new Set<string>();
+        const documents: LintBaseDocument[] = [];
+        let truncated = false;
+
+        const walk = async (
+            queryPath: string,
+            canonicalId: string,
+            depth: number
+        ): Promise<void> => {
+            if (collectionsSeen.size >= FirestoreConnector.MAX_COLLECTION_PATHS) {
+                truncated = true;
+                return;
+            }
+            collectionsSeen.add(canonicalId);
+
+            const docs = await this.sampleDocumentsAtPath(queryPath, canonicalId, limit);
+            documents.push(...docs);
+
+            if (depth >= maxDepth) return;
+
+            for (const doc of docs) {
+                const docQueryPath = `${queryPath}/${doc.id}`;
+                let subs: string[];
+                try {
+                    subs = await this.getSubcollections(docQueryPath);
+                } catch {
+                    // A single document's subcollection lookup failing must not
+                    // abort the whole scan — skip it and keep going.
+                    continue;
+                }
+                for (const sub of subs) {
+                    await walk(
+                        `${docQueryPath}/${sub}`,
+                        `${canonicalId}/*/${sub}`,
+                        depth + 1
+                    );
+                }
+            }
+        };
+
+        for (const root of rootCollections) {
+            await walk(root, root, 1);
+        }
+
+        return { collections: [...collectionsSeen], documents, truncated };
+    }
+
+    /**
+     * Sample docs from the collection at `queryPath` (a real Firestore path with
+     * concrete ancestor document ids) but label each document with `canonicalId`
+     * (the same path with ancestor ids replaced by "*"). For top-level
+     * collections the two are identical.
+     */
+    private async sampleDocumentsAtPath(
+        queryPath: string,
+        canonicalId: string,
+        limit: number
+    ): Promise<LintBaseDocument[]> {
         const snapshot = await this.db
-            .collection(collection)
+            .collection(queryPath)
             .limit(limit)
             .get();
 
-        return snapshot.docs.map((doc) => this.mapDocument(doc, collection));
+        return snapshot.docs.map((doc) => this.mapDocument(doc, canonicalId));
     }
 
     // ── private helpers ────────────────────────────────────────────────────────

@@ -1,4 +1,4 @@
-# LintBase: AI Context & Changelog
+he # LintBase: AI Context & Changelog
 
 > **Purpose:** This file acts as persistent memory across AI agent sessions. If credits run out or a new agent takes over the workspace, **read this file first** to understand the state of the project, the current objectives, and the recent changes made.
 
